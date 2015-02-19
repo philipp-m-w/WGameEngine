@@ -45,6 +45,18 @@
     <ClCompile Include="display.cpp">
       <Filter>Quelldateien\View</Filter>
     </ClCompile>
+    <ClCompile Include="d3dclass.cpp">
+      <Filter>Quelldateien\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="input.cpp">
+      <Filter>Quelldateien\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="keyboardinput.cpp">
+      <Filter>Quelldateien\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="mouseinput.cpp">
+      <Filter>Quelldateien\Controller</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="systemcontroller.h">
@@ -52,6 +64,18 @@
     </ClInclude>
     <ClInclude Include="display.h">
       <Filter>Headerdateien\View</Filter>
+    </ClInclude>
+    <ClInclude Include="d3dclass.h">
+      <Filter>Headerdateien\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="input.h">
+      <Filter>Headerdateien\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="keyboardinput.h">
+      <Filter>Headerdateien\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="mouseinput.h">
+      <Filter>Headerdateien\Controller</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
