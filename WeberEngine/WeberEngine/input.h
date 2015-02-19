@@ -7,17 +7,14 @@
 #pragma comment(lib, "dxguid.lib")
 
 #include <dinput.h>
-#include "systemcontroller.h"
 #include "keyboardinput.h"
 #include "mouseinput.h"
-
-
 
 
 class InputController
 {
 public:
-	InputController(SystemController* controller);
+	InputController();
 	InputController(const InputController&);
 	~InputController();
 
@@ -28,7 +25,6 @@ public:
 	void onEscapePressed();
 
 private:
-	SystemController* systemController;
 	IDirectInput8* m_directInput;
 	KeyboardInput* keyboard;
 	MouseInput* mouse;

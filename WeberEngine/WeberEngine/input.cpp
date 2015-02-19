@@ -1,11 +1,10 @@
 #include "input.h"
 
-InputController::InputController(SystemController* controller)
+InputController::InputController()
 {
 	m_directInput = 0;
 	mouse = 0;
 	keyboard = 0;
-	systemController = controller;
 }
 
 InputController::InputController(const InputController& other)
@@ -70,8 +69,6 @@ void InputController::Shutdown()
 		m_directInput->Release();
 		m_directInput = 0;
 	}
-
-	systemController = 0;
 
 	return;
 }

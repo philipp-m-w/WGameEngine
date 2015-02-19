@@ -21,7 +21,9 @@ private:
 	HINSTANCE m_hinstance;
 	HWND m_hwnd;
 
-	void InitializeWindows(int& width, int& height);
+	int screenWidth, screenHeight;
+
+	void InitializeWindows();
 	void ShutdownWindows();
 
 public:
@@ -32,6 +34,10 @@ public:
 	bool Initialize();
 	void Shutdown();
 	void Run();
+	HWND getHWND();
+	HINSTANCE getHinstance();
+	int getScreenWidth();
+	int getScreenHeight();
 
 	LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
 };

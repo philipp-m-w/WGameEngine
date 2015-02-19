@@ -75,7 +75,7 @@
       <Filter>Headerdateien\Controller</Filter>
     </ClInclude>
     <ClInclude Include="keyboardinput.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>Headerdateien\Controller</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

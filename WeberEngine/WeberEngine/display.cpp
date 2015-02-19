@@ -12,7 +12,7 @@ Display::~Display()
 {
 }
 
-void Display::InitializeWindows(int& screenWidth, int& screenHeight)
+void Display::InitializeWindows()
 {
 	WNDCLASSEX wc;
 	DEVMODE dmScreenSettings;
@@ -95,13 +95,12 @@ void Display::InitializeWindows(int& screenWidth, int& screenHeight)
 
 bool Display::Initialize()
 {
-	int screenWidth, screenHeight;
 	bool result;
 
 	// Initialize the width and height of the screen to zero before sending the variables into the function.
 	screenWidth = 0;
 	screenHeight = 0;
-	InitializeWindows(screenWidth, screenHeight);
+	InitializeWindows();
 	result = true;
 
 	return result;
@@ -201,4 +200,17 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 			return ApplicationHandle->MessageHandler(hwnd, umessage, wparam, lparam);
 		}
 	}
+}
+
+HWND Display::getHWND(){
+	return m_hwnd;
+}
+HINSTANCE Display::getHinstance(){
+	return m_hinstance;
+}
+int Display::getScreenWidth(){
+	return screenWidth;
+}
+int Display::getScreenHeight(){
+	return screenHeight;
 }
