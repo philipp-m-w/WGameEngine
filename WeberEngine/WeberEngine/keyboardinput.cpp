@@ -1,6 +1,6 @@
-#include "keyboardinput.h"
+#include "inputcontroller.h"
 
-KeyboardInput::KeyboardInput(IDirectInput8* m_directInput, Input* input)
+KeyboardInput::KeyboardInput(IDirectInput8* m_directInput, InputController* input)
 {
 	directInput = m_directInput;
 	m_keyboard = 0;

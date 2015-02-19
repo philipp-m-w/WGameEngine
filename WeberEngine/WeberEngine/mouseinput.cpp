@@ -1,6 +1,6 @@
-#include "mouseinput.h"
+#include "inputcontroller.h"
 
-MouseInput::MouseInput(IDirectInput8* m_directInput, Input* input)
+MouseInput::MouseInput(IDirectInput8* m_directInput, InputController* input)
 {
 	listener = input;
 	directInput = m_directInput;
