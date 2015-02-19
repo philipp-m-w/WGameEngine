@@ -9,6 +9,12 @@ public:
 	SystemController();
 	SystemController(const SystemController&);
 	~SystemController();
+
+
+	//Controller Funktionen
+	void closeFrame();
+	void moveCamera(float left, float right, float top, float bottom);
+	void rotateZ(float angle);
 };
 
 #endif
