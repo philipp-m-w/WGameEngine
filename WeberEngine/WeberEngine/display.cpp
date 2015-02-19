@@ -4,6 +4,10 @@ Display::Display()
 {
 }
 
+Display::Display(const Display& other)
+{
+}
+
 Display::~Display()
 {
 }
@@ -98,6 +102,9 @@ bool Display::Initialize()
 	screenWidth = 0;
 	screenHeight = 0;
 	InitializeWindows(screenWidth, screenHeight);
+	result = true;
+
+	return result;
 }
 
 void Display::Shutdown()
@@ -137,6 +144,32 @@ void Display::ShutdownWindows()
 void Display::Run()
 {
 	//eigener Thread?
+	// Loop until there is a quit message from the window or the user.
+
+	//Das ganze hier tut nur eins:
+	//es wird 5 Sekunden lang gewartet, dann geht das Programm aus
+	//DEBUG!!!!
+
+	INT64 m_frequency;
+	double ticksPerMs;
+	QueryPerformanceFrequency((LARGE_INTEGER*)&m_frequency);
+	ticksPerMs = (double)(m_frequency / 1000.0);
+
+	bool done = false;
+	INT64 startTime;
+	QueryPerformanceCounter((LARGE_INTEGER*)& startTime);
+	INT64 currentTime;
+	double timeDifference;
+	while (!done)
+	{
+		QueryPerformanceCounter((LARGE_INTEGER*)& currentTime);
+		timeDifference = (double)(currentTime - startTime) / ticksPerMs;
+
+
+		if (timeDifference > 5000) {
+			done = true;
+		}
+	}
 }
 
 LRESULT CALLBACK Display::MessageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam)

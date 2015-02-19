@@ -4,6 +4,10 @@ SystemController::SystemController()
 {
 }
 
+SystemController::SystemController(const SystemController& other)
+{
+}
+
 SystemController::~SystemController()
 {
 }

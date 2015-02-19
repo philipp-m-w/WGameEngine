@@ -7,7 +7,8 @@ private:
 
 public:
 	SystemController();
+	SystemController(const SystemController&);
 	~SystemController();
-}
+};
 
 #endif
