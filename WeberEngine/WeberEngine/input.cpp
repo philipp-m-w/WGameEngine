@@ -1,6 +1,6 @@
 #include "input.h"
 
-Input::Input(SystemController* controller)
+InputController::InputController(SystemController* controller)
 {
 	m_directInput = 0;
 	mouse = 0;
@@ -8,15 +8,15 @@ Input::Input(SystemController* controller)
 	systemController = controller;
 }
 
-Input::Input(const Input& other)
+InputController::InputController(const InputController& other)
 {
 }
 
-Input::~Input()
+InputController::~InputController()
 {
 }
 
-bool Input::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight)
+bool InputController::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight)
 {
 	HRESULT result;
 
@@ -31,14 +31,14 @@ bool Input::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidth, int scre
 	}
 
 	//initialize all device inputs
-	mouse = new MouseInput(m_directInput, this);
+	mouse = new MouseInput(m_directInput);
 	if (FAILED(mouse))
 	{
 		return false;
 	}
 	mouse->Initialize(hinstance, hwnd, screenWidth, screenHeight);
 
-	keyboard = new KeyboardInput(m_directInput, this);
+	keyboard = new KeyboardInput(m_directInput);
 	if (FAILED(keyboard))
 	{
 		return false;
@@ -48,7 +48,7 @@ bool Input::Initialize(HINSTANCE hinstance, HWND hwnd, int screenWidth, int scre
 	return true;
 }
 
-void Input::Shutdown()
+void InputController::Shutdown()
 {
 	// Release the mouse.
 	if (mouse)
@@ -77,19 +77,19 @@ void Input::Shutdown()
 }
 
 //this check is done in every Frame
-bool Input::checkDeviceInputs()
+bool InputController::checkDeviceInputs()
 {
 	bool result;
 
 	// Read the current state of the keyboard.
-	result = keyboard->checkKeyboardInputs;
+	result = keyboard->checkKeyboardInputs();
 	if (!result)
 	{
 		return false;
 	}
 
 	// Read the current state of the mouse.
-	result = mouse->checkMouseInputs;
+	result = mouse->checkMouseInputs();
 	if (!result)
 	{
 		return false;
@@ -101,6 +101,6 @@ bool Input::checkDeviceInputs()
 	return true;
 }
 
-void Input::onEscapePressed() {
+void InputController::onEscapePressed() {
 	//systemController->
 }

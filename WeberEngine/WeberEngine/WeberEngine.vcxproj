@@ -78,12 +78,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="d3dclass.cpp" />
     <ClCompile Include="display.cpp" />
+    <ClCompile Include="input.cpp" />
+    <ClCompile Include="keyboardinput.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mouseinput.cpp" />
     <ClCompile Include="systemcontroller.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="d3dclass.h" />
     <ClInclude Include="display.h" />
+    <ClInclude Include="input.h" />
+    <ClInclude Include="keyboardinput.h" />
+    <ClInclude Include="mouseinput.h" />
     <ClInclude Include="systemcontroller.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -71,11 +71,11 @@
     <ClInclude Include="input.h">
       <Filter>Headerdateien\Controller</Filter>
     </ClInclude>
-    <ClInclude Include="keyboardinput.h">
-      <Filter>Headerdateien\Controller</Filter>
-    </ClInclude>
     <ClInclude Include="mouseinput.h">
       <Filter>Headerdateien\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="keyboardinput.h">
+      <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

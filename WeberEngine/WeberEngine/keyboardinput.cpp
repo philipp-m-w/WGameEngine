@@ -1,10 +1,9 @@
-#include "inputcontroller.h"
+#include "keyboardinput.h"
 
-KeyboardInput::KeyboardInput(IDirectInput8* m_directInput, InputController* input)
+KeyboardInput::KeyboardInput(IDirectInput8* m_directInput)
 {
 	directInput = m_directInput;
 	m_keyboard = 0;
-	listener = input;
 }
 
 KeyboardInput::KeyboardInput(const KeyboardInput& other)
@@ -56,7 +55,6 @@ void KeyboardInput::Shutdown(){
 	}
 
 	directInput = 0;
-	listener = 0;
 
 	return;
 }
@@ -73,7 +71,6 @@ bool KeyboardInput::checkKeyboardInputs(){
 	if (m_keyboardState[DIK_ESCAPE] & 0x80)
 	{
 		//escape pressed
-		listener->onEscapePressed();
 	}
 
 	return true;

@@ -1,8 +1,7 @@
-#include "inputcontroller.h"
+#include "mouseinput.h"
 
-MouseInput::MouseInput(IDirectInput8* m_directInput, InputController* input)
+MouseInput::MouseInput(IDirectInput8* m_directInput)
 {
-	listener = input;
 	directInput = m_directInput;
 	m_mouse = 0;
 }
@@ -65,7 +64,6 @@ void MouseInput::Shutdown(){
 	}
 
 	directInput = 0;
-	listener = 0;
 	return;
 }
 bool MouseInput::checkMouseInputs(){
