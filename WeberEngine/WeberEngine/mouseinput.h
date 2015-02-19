@@ -7,12 +7,12 @@
 #pragma comment(lib, "dxguid.lib")
 
 #include <dinput.h>
-#include "input.h";
+
 
 class MouseInput
 {
 public:
-	MouseInput(IDirectInput8* m_directInput, Input* input);
+	MouseInput(IDirectInput8* m_directInput);
 	MouseInput(const MouseInput&);
 	~MouseInput();
 
@@ -25,7 +25,6 @@ private:
 	bool ReadMouse();
 
 private:
-	Input* listener;
 	IDirectInput8* directInput;
 	IDirectInputDevice8* m_mouse;
 	DIMOUSESTATE m_mouseState;
@@ -33,4 +32,4 @@ private:
 	int m_mouseX, m_mouseY;
 };
 
-#endif
+#endif;

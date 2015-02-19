@@ -7,12 +7,12 @@
 #pragma comment(lib, "dxguid.lib")
 
 #include <dinput.h>
-#include "input.h";
+
 
 class KeyboardInput
 {
 public:
-	KeyboardInput(IDirectInput8* m_directInput, Input* input);
+	KeyboardInput(IDirectInput8* m_directInput);
 	KeyboardInput(const KeyboardInput&);
 	~KeyboardInput();
 
@@ -24,7 +24,6 @@ private:
 	bool ReadKeyboard();
 
 private:
-	Input* listener;
 	IDirectInput8* directInput;
 	IDirectInputDevice8* m_keyboard;
 	unsigned char m_keyboardState[256];
