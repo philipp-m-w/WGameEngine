@@ -16,10 +16,42 @@
     <Filter Include="shader">
       <UniqueIdentifier>{f8c7a782-9676-4c84-a1cc-77805416d688}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Quelldateien\Model">
+      <UniqueIdentifier>{09f4866d-d341-4a1e-aceb-57c57ee135cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\View">
+      <UniqueIdentifier>{7cc73527-3db6-42fa-9c22-0bde799bf7f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\Controller">
+      <UniqueIdentifier>{6f62b95d-e9a0-47b4-8f9c-f5e8f5664910}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Model">
+      <UniqueIdentifier>{d7674543-8892-4430-ae3b-9bd2f91848eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\View">
+      <UniqueIdentifier>{45a3fda4-59b1-421e-bc0b-abb2f545b280}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\Controller">
+      <UniqueIdentifier>{0c0a4d6a-800d-4497-becb-a33d8d55c2d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="systemcontroller.cpp">
+      <Filter>Quelldateien\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="display.cpp">
+      <Filter>Quelldateien\View</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="systemcontroller.h">
+      <Filter>Headerdateien\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="display.h">
+      <Filter>Headerdateien\View</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
