@@ -10,6 +10,7 @@ class StandardModel
 {
 private:
 
+	//Datentyp für Grafikkarte
 	struct Vertex
 	{
 		D3DXVECTOR3 position;
@@ -17,6 +18,8 @@ private:
 		D3DXVECTOR3 normal;
 	};
 
+	//datentyp, mit dessen hilfe die Daten aus model.txt gelesen werden
+	//diese Daten werden später würs Rendern in den Vertex-Datentyp konvertiert
 	struct ModelData
 	{
 		//position of vertex
