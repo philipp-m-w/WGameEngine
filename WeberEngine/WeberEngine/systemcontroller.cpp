@@ -26,7 +26,7 @@ bool SystemController::Initialize()
 {
 	bool result = false;
 	//Create Display class for visualizing everything on the screen
-	display = new Display();
+	display = new Display(this);
 	if (display)
 	{
 		display->Initialize(); //if constructor doesnt work, everything else is pointless

@@ -1,5 +1,4 @@
-#ifndef _DISPLAY_H_
-#define _DISPLAY_H_
+#pragma once
 
 
 #define WIN32_LEAN_AND_MEAN
@@ -14,12 +13,15 @@ const bool VSYNC_ENABLED = true;
 const float SCREEN_DEPTH = 1000.0f;
 const float SCREEN_NEAR = 0.1f;
 
+class SystemController;
+
 class Display
 {
 private:
 	LPCWSTR m_applicationName;
 	HINSTANCE m_hinstance;
 	HWND m_hwnd;
+	SystemController* systemController;
 
 	int screenWidth, screenHeight;
 
@@ -28,7 +30,7 @@ private:
 
 public:
 
-	Display();
+	Display(SystemController* systemController);
 	Display(const Display&);
 	~Display();
 	bool Initialize();
@@ -49,4 +51,3 @@ static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 static Display* ApplicationHandle = 0;
 
-#endif

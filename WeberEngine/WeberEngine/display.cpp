@@ -1,6 +1,7 @@
 #include "display.h"
+#include "systemcontroller.h"
 
-Display::Display()
+Display::Display(SystemController* systemController_) :systemController(systemController_)
 {
 }
 
@@ -164,6 +165,8 @@ void Display::Run()
 		QueryPerformanceCounter((LARGE_INTEGER*)& currentTime);
 		timeDifference = (double)(currentTime - startTime) / ticksPerMs;
 
+		//Test ob Systemclass-Funktion aufgerufen werden kann
+		systemController->closeFrame(); //tut in diesem Fall nichts
 
 		if (timeDifference > 5000) {
 			done = true;
