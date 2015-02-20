@@ -60,8 +60,8 @@
     <ClCompile Include="mouseinput.cpp">
       <Filter>Quelldateien\Controller</Filter>
     </ClCompile>
-    <ClCompile Include="graphicscontroller.cpp">
-      <Filter>Quelldateien\Model</Filter>
+    <ClCompile Include="camera.cpp">
+      <Filter>Quelldateien\View</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -83,11 +83,14 @@
     <ClInclude Include="keyboardinput.h">
       <Filter>Headerdateien\Controller</Filter>
     </ClInclude>
-    <ClInclude Include="graphicscontroller.h">
-      <Filter>Headerdateien\Model</Filter>
+    <ClInclude Include="inputsenum.h">
+      <Filter>Headerdateien\Utility</Filter>
     </ClInclude>
     <ClInclude Include="options.h">
       <Filter>Headerdateien\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>Headerdateien\View</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

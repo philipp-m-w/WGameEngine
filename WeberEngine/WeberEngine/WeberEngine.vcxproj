@@ -78,6 +78,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="camera.cpp" />
     <ClCompile Include="d3dclass.cpp" />
     <ClCompile Include="display.cpp" />
     <ClCompile Include="input.cpp" />
@@ -87,11 +88,14 @@
     <ClCompile Include="systemcontroller.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="camera.h" />
     <ClInclude Include="d3dclass.h" />
     <ClInclude Include="display.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="inputsenum.h" />
     <ClInclude Include="keyboardinput.h" />
     <ClInclude Include="mouseinput.h" />
+    <ClInclude Include="options.h" />
     <ClInclude Include="systemcontroller.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

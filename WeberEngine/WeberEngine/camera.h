@@ -24,9 +24,9 @@ public:
 	void rotateLeftAroundUp();
 	void rotateRightAroundUp();
 
-	D3DXVECTOR3 GetPosition();
-	D3DXVECTOR3 GetViewDirection();
-	D3DXMATRIX GetViewMatrix();
+	D3DXVECTOR3* GetPosition();
+	D3DXVECTOR3* GetViewDirection();
+	D3DXMATRIX* GetViewMatrix();
 
 	void updateCamera();
 private:

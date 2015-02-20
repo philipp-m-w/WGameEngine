@@ -68,37 +68,30 @@ void Camera::rotateRightAroundUp(){
 	m_yaw += m_rotateUpSpeed;
 }
 
-D3DXVECTOR3 Camera::GetPosition(){
-	return m_position;
+D3DXVECTOR3* Camera::GetPosition(){
+	return &m_position;
 }
-D3DXVECTOR3 Camera::GetViewDirection(){
-	return m_viewDirection;
+D3DXVECTOR3* Camera::GetViewDirection(){
+	return &m_viewDirection;
 }
-D3DXMATRIX Camera::GetViewMatrix(){
-	return m_viewMatrix;
+D3DXMATRIX* Camera::GetViewMatrix(){
+	return &m_viewMatrix;
 }
 
 void Camera::updateCamera(){
 
-	D3DXMATRIX *camToWorld = new D3DXMATRIX();
-	D3DXMatrixTranslation(camToWorld, m_position[0], m_position[1], m_position[2]);
-	D3DXMatrixRotationY(camToWorld, m_yaw);
-	D3DXMatrixRotationX(camToWorld, m_pitch);
+	D3DXMATRIX rotationMatrix;
+	D3DXMatrixRotationYawPitchRoll(&rotationMatrix, m_yaw, m_pitch, m_roll);
 	
-	m_viewDirection[0] = -camToWorld->_31;
-	m_viewDirection[1] = -camToWorld->_32;
-	m_viewDirection[2] = -camToWorld->_33;
+	m_viewDirection = D3DXVECTOR3(0.f, 0.f, 1.f);
+	m_up = D3DXVECTOR3(0.f, 1.f, 0.f);
 
-	D3DXMatrixInverse(camToWorld, NULL, camToWorld);
-	m_viewMatrix = *camToWorld;
+	D3DXVec3TransformCoord(&m_viewDirection, &m_viewDirection, &rotationMatrix);
+	D3DXVec3TransformCoord(&m_up, &m_up, &rotationMatrix);
 
-	m_right[0] = m_viewMatrix._11;
-	m_right[1] = m_viewMatrix._12;
-	m_right[2] = m_viewMatrix._13;
+	// Translate the rotated camera position to the location of the viewer.
+	m_viewDirection = m_position + m_viewDirection;
 
-	m_up[0] = m_viewMatrix._21;
-	m_up[1] = m_viewMatrix._22;
-	m_up[2] = m_viewMatrix._23;
-
-	delete(camToWorld);
+	// Finally create the view matrix from the three updated vectors.
+	D3DXMatrixLookAtLH(&m_viewMatrix, &m_position, &m_viewDirection, &m_up);
 }
