@@ -40,9 +40,9 @@ void SystemController::processInputEvent(InputEvent event) {
 		break;
 	case SPACE:
 		break;
-	case MLEFTCLICK:
+	case MLEFTCLICK: display->closeFrame();
 		break;
-	case MRIGHTCLICK:
+	case MRIGHTCLICK: display->closeFrame();
 		break;
 	default:
 		break;
