@@ -1,5 +1,6 @@
 #include "display.h"
 #include "systemcontroller.h"
+#include "options.h"
 
 Display::Display(SystemController* systemController_) :systemController(systemController_)
 {
