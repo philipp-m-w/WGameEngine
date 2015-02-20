@@ -7,6 +7,8 @@
 #pragma comment(lib, "dxguid.lib")
 
 #include <dinput.h>
+#include <vector>
+#include "inputsenum.h"
 
 
 class KeyboardInput
@@ -18,10 +20,10 @@ public:
 
 	bool Initialize(HINSTANCE, HWND);
 	void Shutdown();
-	bool checkKeyboardInputs();
+	std::vector<InputEvent>* checkKeyboardInputs();
 
 private:
-	bool ReadKeyboard();
+	void ReadKeyboard();
 
 private:
 	IDirectInput8* directInput;

@@ -1,8 +1,8 @@
-#ifndef _SYSTEMCONTROLLER_H_
-#define _SYSTEMCONTROLLER_H_
+#pragma once
 
 #include "display.h"
 #include "input.h"
+#include "inputsenum.h"
 
 class SystemController
 {
@@ -20,10 +20,8 @@ public:
 	bool StartDisplaying();
 
 
-	//Controller Funktionen
-	void closeFrame();
-	void moveCamera(float left, float right, float top, float bottom);
-	void rotateZ(float angle);
+	//Input Funktionen
+	void checkDeviceInputs();
+	void processInputEvent(InputEvent event);
+	std::vector<int>* getMouseLocation();
 };
-
-#endif

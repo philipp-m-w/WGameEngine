@@ -12,14 +12,45 @@ SystemController::~SystemController()
 {
 }
 
-void SystemController::closeFrame(){
-
+//this check is done in every Frame
+void SystemController::checkDeviceInputs()
+{
+	std::vector<InputEvent>* resultEvents = inputController->checkDeviceInputs();
+	for each (InputEvent event in *resultEvents)
+	{
+		processInputEvent(event);
+	}
+	delete resultEvents;
 }
-void SystemController::moveCamera(float left, float right, float top, float bottom){
 
+void SystemController::processInputEvent(InputEvent event) {
+	switch (event)
+	{
+	case LEFT:
+		break;
+	case RIGHT:
+		break;
+	case UP:
+		break;
+	case DOWN:
+		break;
+	case ESCAPE: display->closeFrame();
+		break;
+	case ENTER:
+		break;
+	case SPACE:
+		break;
+	case MLEFTCLICK:
+		break;
+	case MRIGHTCLICK:
+		break;
+	default:
+		break;
+	}
 }
-void SystemController::rotateZ(float angle){
 
+std::vector<int>* SystemController::getMouseLocation() {
+	return inputController->getMouseLocation();
 }
 
 bool SystemController::Initialize()

@@ -16,6 +16,7 @@ private:
 	SystemController* systemController;
 
 	int screenWidth, screenHeight;
+	bool done;
 
 	void InitializeWindows();
 	void ShutdownWindows();
@@ -28,6 +29,7 @@ public:
 	bool Initialize();
 	void Shutdown();
 	void Run();
+	void closeFrame();
 	HWND getHWND();
 	HINSTANCE getHinstance();
 	int getScreenWidth();

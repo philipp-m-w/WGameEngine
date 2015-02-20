@@ -7,7 +7,8 @@
 #pragma comment(lib, "dxguid.lib")
 
 #include <dinput.h>
-
+#include "inputsenum.h"
+#include <vector>
 
 class MouseInput
 {
@@ -18,11 +19,12 @@ public:
 
 	bool Initialize(HINSTANCE, HWND, int screenWidth, int screenHeight);
 	void Shutdown();
-	bool checkMouseInputs();
+	std::vector<InputEvent>* checkMouseInputs();
 	void UpdateMouseLocation();
+	std::vector<int>* getMouseLocation();
 
 private:
-	bool ReadMouse();
+	void ReadMouse();
 
 private:
 	IDirectInput8* directInput;

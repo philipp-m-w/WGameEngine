@@ -9,6 +9,8 @@
 #include <dinput.h>
 #include "keyboardinput.h"
 #include "mouseinput.h"
+#include "inputsenum.h"
+#include <vector>
 
 
 class InputController
@@ -21,8 +23,8 @@ public:
 	bool Initialize(HINSTANCE, HWND, int screenWidth, int screenHeight);
 	void Shutdown();
 	//this check is done in every Frame
-	bool checkDeviceInputs();
-	void onEscapePressed();
+	std::vector<InputEvent>* checkDeviceInputs();
+	std::vector<int>* getMouseLocation();
 
 private:
 	IDirectInput8* m_directInput;

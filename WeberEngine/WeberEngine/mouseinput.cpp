@@ -66,20 +66,28 @@ void MouseInput::Shutdown(){
 	directInput = 0;
 	return;
 }
-bool MouseInput::checkMouseInputs(){
-	bool result;
+std::vector<InputEvent>* MouseInput::checkMouseInputs(){
+	std::vector<InputEvent> *resultEvents = new std::vector<InputEvent>();
 
 	// Read the current state of the mouse.
-	result = ReadMouse();
-	if (!result)
-	{
-		return false;
-	}
+	ReadMouse();
 
 	// Update the changes in the mouse.
 	UpdateMouseLocation();
 
-	return true;
+	//check Mouse Events
+
+	// has a single-click occured?
+	if (m_mouseState.rgbButtons[0]) {
+		//leftClick ?
+		resultEvents->push_back(InputEvent::MLEFTCLICK);
+	}
+	if (m_mouseState.rgbButtons[1]) {
+		//leftClick ?
+		resultEvents->push_back(InputEvent::MRIGHTCLICK);
+	}
+
+	return resultEvents;
 }
 void MouseInput::UpdateMouseLocation(){
 	// Update the location of the mouse cursor based on the change of the mouse location during the frame.
@@ -95,7 +103,7 @@ void MouseInput::UpdateMouseLocation(){
 
 	return;
 }
-bool MouseInput::ReadMouse(){
+void MouseInput::ReadMouse(){
 	HRESULT result;
 
 	// Read the mouse device.
@@ -107,11 +115,14 @@ bool MouseInput::ReadMouse(){
 		{
 			m_mouse->Acquire();
 		}
-		else
-		{
-			return false;
-		}
-	}
 
-	return true;
+	}
+}
+
+std::vector<int>* MouseInput::getMouseLocation()
+{
+	std::vector<int>* location = new std::vector<int>();
+	location->push_back(m_mouseX);
+	location->push_back(m_mouseY);
+	return location;
 }

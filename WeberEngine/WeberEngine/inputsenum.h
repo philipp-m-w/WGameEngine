@@ -1,0 +1,3 @@
+#pragma once
+
+enum InputEvent { LEFT, RIGHT, UP, DOWN, ESCAPE, ENTER, SPACE, MLEFTCLICK, MRIGHTCLICK};

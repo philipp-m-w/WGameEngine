@@ -1,4 +1,5 @@
 #include "keyboardinput.h"
+#include "systemcontroller.h"
 
 KeyboardInput::KeyboardInput(IDirectInput8* m_directInput)
 {
@@ -58,24 +59,47 @@ void KeyboardInput::Shutdown(){
 
 	return;
 }
-bool KeyboardInput::checkKeyboardInputs(){
-	bool result;
+std::vector<InputEvent>* KeyboardInput::checkKeyboardInputs(){
 	// Read the current state of the keyboard.
-	result = ReadKeyboard();
-	if (!result)
-	{
-		return false;
-	}
+	ReadKeyboard();
+
+	std::vector<InputEvent>* resultEvents = new std::vector<InputEvent>();
 
 	//check for events
 	if (m_keyboardState[DIK_ESCAPE] & 0x80)
 	{
 		//escape pressed
+		resultEvents->push_back(InputEvent::ESCAPE);
+	}
+	if (m_keyboardState[DIK_LEFTARROW] & 0x80)
+	{
+		//escape pressed
+		resultEvents->push_back(InputEvent::LEFT);
+	}
+	if (m_keyboardState[DIK_RIGHTARROW] & 0x80)
+	{
+		//escape pressed
+		resultEvents->push_back(InputEvent::RIGHT);
+	}
+	if (m_keyboardState[DIK_UPARROW] & 0x80)
+	{
+		//escape pressed
+		resultEvents->push_back(InputEvent::UP);
+	}
+	if (m_keyboardState[DIK_DOWNARROW] & 0x80)
+	{
+		//escape pressed
+		resultEvents->push_back(InputEvent::DOWN);
+	}
+	if (m_keyboardState[DIK_SPACE] & 0x80)
+	{
+		//escape pressed
+		resultEvents->push_back(InputEvent::SPACE);
 	}
 
-	return true;
+	return resultEvents;
 }
-bool KeyboardInput::ReadKeyboard(){
+void KeyboardInput::ReadKeyboard(){
 	HRESULT result;
 
 	// Read the keyboard device.
@@ -87,11 +111,6 @@ bool KeyboardInput::ReadKeyboard(){
 		{
 			m_keyboard->Acquire();
 		}
-		else
-		{
-			return false;
-		}
 	}
-
-	return true;
+	return;
 }

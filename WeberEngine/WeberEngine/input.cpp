@@ -54,14 +54,14 @@ void InputController::Shutdown()
 	{
 		mouse->Shutdown();
 	}
-	free(mouse);
+	delete(mouse);
 
 	// Release the keyboard.
 	if (keyboard)
 	{
 		keyboard->Shutdown();
 	}
-	free(keyboard);
+	delete(keyboard);
 
 	// Release the main interface to direct input.
 	if (m_directInput)
@@ -74,30 +74,24 @@ void InputController::Shutdown()
 }
 
 //this check is done in every Frame
-bool InputController::checkDeviceInputs()
+std::vector<InputEvent>* InputController::checkDeviceInputs()
 {
-	bool result;
-
 	// Read the current state of the keyboard.
-	result = keyboard->checkKeyboardInputs();
-	if (!result)
-	{
-		return false;
-	}
+	std::vector<InputEvent>* resultEvents = keyboard->checkKeyboardInputs();
+	std::vector<InputEvent>* tempEvents = mouse->checkMouseInputs();
 
 	// Read the current state of the mouse.
-	result = mouse->checkMouseInputs();
-	if (!result)
-	{
-		return false;
-	}
+	resultEvents->insert(resultEvents->end(), tempEvents->begin(), tempEvents->end());
 
 	// update the mouse-location
 	mouse->UpdateMouseLocation();
 
-	return true;
+	delete(tempEvents);
+
+	return resultEvents;
 }
 
-void InputController::onEscapePressed() {
-	//systemController->
+std::vector<int>* InputController::getMouseLocation() {
+	return mouse->getMouseLocation();
 }
+
