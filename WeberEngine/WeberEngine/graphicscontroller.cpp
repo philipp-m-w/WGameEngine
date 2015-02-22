@@ -4,6 +4,8 @@
 GraphicsController::GraphicsController()
 {
 	d3dClass = 0;
+	m_camera = 0;
+	m_lights = 0;
 }
 
 GraphicsController::GraphicsController(const GraphicsController&)
@@ -35,6 +37,12 @@ bool GraphicsController::Initialize(int screenWidth, int screenHeight, HWND hwnd
 		return false;
 	}
 
+	//create Camera
+	m_camera = new Camera(D3DXVECTOR3(0.0f, 0.0f, -10.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f));
+
+	//create light-vector
+	m_lights = new std::vector<Light>();
+
 }
 
 void GraphicsController::ShutDown()
@@ -45,6 +53,9 @@ void GraphicsController::ShutDown()
 		delete d3dClass;
 		d3dClass = 0;
 	}
+
+	delete(m_camera);
+	delete(m_lights);
 }
 
 
@@ -55,4 +66,9 @@ void GraphicsController::ShutDown()
 void GraphicsController::buildFrame()
 {
 
+}
+
+void GraphicsController::addLight(D3DXVECTOR3 position, D3DXVECTOR3 direction, D3DXVECTOR4 color) {
+	Light light = Light(position, direction, color);
+	m_lights->push_back(light);
 }
