@@ -50,6 +50,8 @@ private:
 
 	void LoadModel();
 	void ReleaseModel();
+	void ShutdownBuffers();
+	bool InitializeBuffers();
 	
 public:
 	StandardModel(char* modelFilePath, WCHAR* textureFilePath, ID3D11Device* device);
@@ -61,10 +63,10 @@ public:
 	//!!Make sure this function is called before Shader-Rendering!!
 	void LoadModelDataToGraphicsCard(ID3D11DeviceContext* deviceContext);
 
-	bool InitializeBuffers();
+	
 	bool Initialize();
 	void ShutDown();
-	void ShutdownBuffers();
+	
 
 	//Getters for vertexCount, IndexCount and Texture
 	int GetIndexCount();

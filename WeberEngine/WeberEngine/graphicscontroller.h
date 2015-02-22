@@ -4,6 +4,7 @@
 #include "camera.h"
 #include "light.h"
 #include "phongshadering.h"
+#include "model.h"
 #include <vector>
 
 
@@ -12,7 +13,9 @@ class GraphicsController
 private:
 	D3DClass* d3dClass;
 	Camera* m_camera;
+	PhongShadering* phongShadering;
 	std::vector<Light>* m_lights;
+	std::vector<StandardModel*>* models;
 
 public:
 	GraphicsController();

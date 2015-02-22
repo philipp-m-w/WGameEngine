@@ -6,10 +6,48 @@ SamplerState SampleType;
 
 cbuffer LightBuffer
 {
-	int lightCount;
-    float4[] lightColors;
-    float3[] lightDirections;
-	float3[] lightPositions;
+	int lightCount;    
+
+	float4 lightColor1;
+	//Position und Richtung des Lichts für PhongShading
+	float3 lightDirection1;
+	float3 lightPosition1;	
+
+	float4 lightColor2;
+	float3 lightDirection2;
+	float3 lightPosition2;
+
+	float4 lightColor3;
+	float3 lightDirection3;
+	float3 lightPosition3;
+
+	float4 lightColor4;
+	float3 lightDirection4;
+	float3 lightPosition4;
+
+	float4 lightColor5;
+	float3 lightDirection5;
+	float3 lightPosition5;
+
+	float4 lightColor6;
+	float3 lightDirection6;
+	float3 lightPosition6;
+
+	float4 lightColor7;
+	float3 lightDirection7;
+	float3 lightPosition7;
+
+	float4 lightColor8;
+	float3 lightDirection8;
+	float3 lightPosition8;
+
+	float4 lightColor9;
+	float3 lightDirection9;
+	float3 lightPosition9;
+
+	float4 lightColor10;
+	float3 lightDirection10;
+	float3 lightPosition10;
 };
 
 cbuffer MaterialBuffer
@@ -40,6 +78,14 @@ float4 PhongPixelShader(PixelInputType input) : SV_TARGET
 {
 	float4 outputColor;
 	outputColor.a = 0.0;
+
+	//lege array fuer lichter an:
+	float4 lightColors[10] = {lightColor1, lightColor2, lightColor3, lightColor4, lightColor5, lightColor6, lightColor7, lightColor8, lightColor9, lightColor10};
+    float3 lightDirections[10] = {lightDirection1, lightDirection2, lightDirection3, lightDirection4, lightDirection5, lightDirection6, lightDirection7, lightDirection8, lightDirection9, lightDirection10};
+	float3 lightPositions[10] = {lightPosition1, lightPosition2, lightPosition3, lightPosition4, lightPosition5, lightPosition6, lightPosition7, lightPosition8, lightPosition9, lightPosition10};
+	for (int i = 0; i < )
+
+
 	float4 textureColor = shaderTexture.Sample(SampleType, input.tex);
 	float3 k_d = textureColor.xyz;
 

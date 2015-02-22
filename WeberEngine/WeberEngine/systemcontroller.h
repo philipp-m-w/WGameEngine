@@ -3,12 +3,14 @@
 #include "display.h"
 #include "input.h"
 #include "inputsenum.h"
+#include "graphicscontroller.h"
 
 class SystemController
 {
 private:
 	Display* display;
 	InputController* inputController;
+	GraphicsController* graphicsController;
 
 public:
 	SystemController();
@@ -18,6 +20,8 @@ public:
 	bool Initialize();
 	bool Shutdown();
 	bool StartDisplaying();
+
+	void buildFrame();
 
 
 	//Input Funktionen

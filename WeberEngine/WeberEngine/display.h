@@ -5,6 +5,7 @@
 
 #include <windows.h>
 
+
 class SystemController;
 
 class Display
@@ -14,6 +15,7 @@ private:
 	HINSTANCE m_hinstance;
 	HWND m_hwnd;
 	SystemController* systemController;
+	
 
 	int screenWidth, screenHeight;
 	bool done;
