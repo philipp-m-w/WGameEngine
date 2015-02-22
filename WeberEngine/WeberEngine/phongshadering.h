@@ -18,13 +18,15 @@ struct RenderData
 
 	ID3D11ShaderResourceView* texture;
 
-	D3DXVECTOR3 lightDirection;
-	D3DXVECTOR3 lightPosition;
+	//Lights !!MULTIPLE!!
+	int light_count;
+	D3DXVECTOR3* lightDirections;
+	D3DXVECTOR3* lightPositions;
+	D3DXVECTOR4* lightColors;
 
-	D3DXVECTOR4 ambientColor;
-	D3DXVECTOR4 diffuseColor;
-	D3DXVECTOR4 specularColor;
-	float specularPower;
+	//material info
+	float n;
+	D3DXVECTOR3 k_s;
 
 	D3DXVECTOR3 cameraPosition;
 };
@@ -45,17 +47,20 @@ private:
 		float padding;
 	};
 
+	struct MaterialBuffer
+	{
+		float n;
+		D3DXVECTOR3 k_s;		
+	};
+
 	struct LightBuffer
 	{
+		int lightCount;
 		//TODO: Achtung Reihenfolge ist später für Grafikkarte exctrem wichtig!!
-		D3DXVECTOR4 ambientColor;
-		D3DXVECTOR4 diffuseColor;
-		D3DXVECTOR4 specularColor;
+		D3DXVECTOR4 lightColor;
 		//Position und Richtung des Lichts für PhongShading
 		D3DXVECTOR3 lightDirection;
-		D3DXVECTOR3 lightPosition;
-		float specularPower;
-		
+		D3DXVECTOR3 lightPosition;	
 	};
 
 	//////////////
@@ -72,6 +77,7 @@ private:
 
 	//Buffers for rendering-data
 	ID3D11Buffer* m_matrixBuffer;
+	ID3D11Buffer* m_materialBuffer;
 	ID3D11Buffer* m_lightBuffer;
 	ID3D11Buffer* m_cameraBuffer;
 
@@ -79,13 +85,15 @@ private:
 	///////////////////
 	//private functions
 	///////////////////
-	bool InitializeShader(ID3D11Device*, HWND, WCHAR*, WCHAR*);
+	bool InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, WCHAR* psFilename);
 	void ShutdownShader();
-	void OutputShaderErrorMessage(ID3D10Blob*, HWND, WCHAR*);
+	void OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hwnd, WCHAR* shaderFilename);
 
-	bool SetShaderParameters(ID3D11DeviceContext*, D3DXMATRIX, D3DXMATRIX, D3DXMATRIX, ID3D11ShaderResourceView*, D3DXVECTOR3, D3DXVECTOR4, D3DXVECTOR4,
-		D3DXVECTOR3, D3DXVECTOR4, float);
-	void RenderShader(ID3D11DeviceContext*, int);
+	//bool SetShaderParameters(ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, ID3D11ShaderResourceView* texture, D3DXVECTOR3 lightDirection, D3DXVECTOR3 lightPosition, D3DXVECTOR4 lightColor,
+	//	D3DXVECTOR3 cameraPosition, float specularPower);
+	bool SetShaderParameters(RenderData* renderData);
+
+	void RenderShader(ID3D11DeviceContext* deviceContext, int indexCount);
 
 public:
 	PhongShadering();
