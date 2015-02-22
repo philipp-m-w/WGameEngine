@@ -147,33 +147,11 @@ void Display::Run()
 	//eigener Thread?
 	// Loop until there is a quit message from the window or the user.
 
-	//Das ganze hier tut nur eins:
-	//es wird 5 Sekunden lang gewartet, dann geht das Programm aus
-	//DEBUG!!!!
-
-	//INT64 m_frequency;
-	//double ticksPerMs;
-	//QueryPerformanceFrequency((LARGE_INTEGER*)&m_frequency);
-	//ticksPerMs = (double)(m_frequency / 1000.0);
-
 	done = false;
-	//INT64 startTime;
-	//QueryPerformanceCounter((LARGE_INTEGER*)& startTime);
-	//INT64 currentTime;
-	//double timeDifference;
 	while (!done)
 	{
 		//check Inputs
 		systemController->checkDeviceInputs();
-		//QueryPerformanceCounter((LARGE_INTEGER*)& currentTime);
-		//timeDifference = (double)(currentTime - startTime) / ticksPerMs;
-
-		////Test ob Systemclass-Funktion aufgerufen werden kann
-		//systemController->closeFrame(); //tut in diesem Fall nichts
-
-		//if (timeDifference > 5000) {
-		//	done = true;
-		//}
 	}
 }
 
