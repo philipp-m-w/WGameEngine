@@ -62,7 +62,7 @@ cbuffer MaterialBuffer
 //////////////
 struct PixelInputType
 {
-	float3 cam_world_pos;
+	float3 cam_world_pos : TEXCOORD2;
 	//world position of the pixel
     float4 position : SV_POSITION;
     float2 tex : TEXCOORD0;
@@ -76,30 +76,36 @@ struct PixelInputType
 ////////////////////////////////////////////////////////////////////////////////
 float4 PhongPixelShader(PixelInputType input) : SV_TARGET
 {
-	float4 outputColor;
-	outputColor.a = 0.0;
+	float4 outputColor = float4(0.0, 0.0, 0.0, 0.0);
 
 	//lege array fuer lichter an:
 	float4 lightColors[10] = {lightColor1, lightColor2, lightColor3, lightColor4, lightColor5, lightColor6, lightColor7, lightColor8, lightColor9, lightColor10};
     float3 lightDirections[10] = {lightDirection1, lightDirection2, lightDirection3, lightDirection4, lightDirection5, lightDirection6, lightDirection7, lightDirection8, lightDirection9, lightDirection10};
 	float3 lightPositions[10] = {lightPosition1, lightPosition2, lightPosition3, lightPosition4, lightPosition5, lightPosition6, lightPosition7, lightPosition8, lightPosition9, lightPosition10};
-	for (int i = 0; i < )
-
 
 	float4 textureColor = shaderTexture.Sample(SampleType, input.tex);
 	float3 k_d = textureColor.xyz;
 
-	float3 V = normalize(cam_world_pos - position.xyz);
+	float3 V = normalize(input.cam_world_pos - input.position.xyz);
 	//TODO: reflect??
-	float3 R = normalize(reflect(V, normal));
+	float3 R = normalize(reflect(V, input.normal));
+
+	float3 in_pos = input.position.xyz;
 
 	[loop]
-	for (uint i = 0; i < light_count; i++)
+	for (int i = 0; i < lightCount; i++)
 	{
-		vec3 L = normalize(lightPositions[i] - position);
-		vec3 multiplicator = k_d * max(0.0, dot(L, world_normal_interpolated)) + k_s * pow(max(0.0, dot(R, L)), n);
-		float divisor = saturate(dot((position - lightPosition[i]), (position - lightPosition[i])));
-		outputColor.rgb += (multiplicator * (lightColor[i] / divisor), 1.0);
+		float3 L = normalize(lightPositions[i] - in_pos);
+		float3 multiplicator = k_d * max(0.0, dot(L, input.normal)) + k_s * pow(max(0.0, dot(R, L)), n);
+		float divisor = saturate(dot((in_pos - lightPositions[i]), (in_pos - lightPositions[i])));
+		outputColor.rgb += (multiplicator * (lightColors[i].rgb / divisor), 1.0);
 	}
-	outputColor.rgb = (outputColor.rgb / light_count);
+	if (lightCount > 0) 
+	{
+		outputColor.rgb = (outputColor.rgb / lightCount);
+	} else {
+		outputColor.rgb = k_d;
+	}
+
+	return saturate(outputColor);
 }

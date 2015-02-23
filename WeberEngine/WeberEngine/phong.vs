@@ -26,7 +26,7 @@ struct VertexInputType
 
 struct PixelInputType
 {
-	float3 cam_world_pos;
+	float3 cam_world_pos : POSITION0;
 	//world position of the pixel
     float4 position : SV_POSITION;
     float2 tex : TEXCOORD0;

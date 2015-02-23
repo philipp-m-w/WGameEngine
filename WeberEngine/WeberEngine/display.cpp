@@ -152,7 +152,7 @@ void Display::Run()
 	{
 		//check Inputs
 		systemController->checkDeviceInputs();
-		sys
+		systemController->buildFrame();
 	}
 }
 

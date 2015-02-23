@@ -2,6 +2,7 @@
 
 SystemController::SystemController()
 {
+	graphicsController = 0;
 }
 
 SystemController::SystemController(const SystemController& other)
@@ -71,24 +72,44 @@ bool SystemController::Initialize()
 			result = inputController->Initialize(hinst, hwnd, display->getScreenWidth(), display->getScreenHeight());
 		}
 	}
+	graphicsController = new GraphicsController();
+	result = graphicsController->Initialize(display->getScreenWidth(), display->getScreenHeight(), display->getHWND());
+	if (!result)
+	{
+		return false;
+	}
+
 	return result;
 }
 
 bool SystemController::Shutdown()
 {
 	//Free everything
-	if (display) {
-		display->Shutdown();
-		delete display;
-		display = 0;
-	}
+	
 	if (inputController) {
 		inputController->Shutdown();
 		delete inputController;
 		inputController = 0;
 	}
+	if (graphicsController) {
+		graphicsController->ShutDown();
+		delete graphicsController;
+		graphicsController = 0;
+	}
+
+	if (display) {
+		display->Shutdown();
+		delete display;
+		display = 0;
+	}
 	return true;
 }
+
+void SystemController::buildFrame()
+{
+	graphicsController->buildFrame();
+}
+
 bool SystemController::StartDisplaying()
 {
 	display->Run();

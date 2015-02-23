@@ -81,22 +81,36 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="d3dclass.cpp" />
     <ClCompile Include="display.cpp" />
+    <ClCompile Include="graphicscontroller.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="keyboardinput.cpp" />
+    <ClCompile Include="light.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="model.cpp" />
     <ClCompile Include="mouseinput.cpp" />
+    <ClCompile Include="phongshadering.cpp" />
     <ClCompile Include="systemcontroller.cpp" />
+    <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
     <ClInclude Include="d3dclass.h" />
     <ClInclude Include="display.h" />
+    <ClInclude Include="graphicscontroller.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="inputsenum.h" />
     <ClInclude Include="keyboardinput.h" />
+    <ClInclude Include="light.h" />
+    <ClInclude Include="model.h" />
     <ClInclude Include="mouseinput.h" />
     <ClInclude Include="options.h" />
+    <ClInclude Include="phongshadering.h" />
     <ClInclude Include="systemcontroller.h" />
+    <ClInclude Include="texture.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="phong.ps" />
+    <None Include="phong.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
