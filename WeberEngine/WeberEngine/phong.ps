@@ -7,6 +7,7 @@ SamplerState SampleType;
 cbuffer LightBuffer
 {
 	int lightCount;    
+	float3 padding;
 
 	float4 lightColor1;
 	//Position und Richtung des Lichts für PhongShading
@@ -76,11 +77,12 @@ struct PixelInputType
 ////////////////////////////////////////////////////////////////////////////////
 float4 PhongPixelShader(PixelInputType input) : SV_TARGET
 {
-	float4 outputColor = float4(0.0, 0.0, 0.0, 0.0);
+		
+	float4 outputColor = float4(0.0f, 0.0f, 0.0f, 0.0f);
 
 	//lege array fuer lichter an:
 	float4 lightColors[10] = {lightColor1, lightColor2, lightColor3, lightColor4, lightColor5, lightColor6, lightColor7, lightColor8, lightColor9, lightColor10};
-    float3 lightDirections[10] = {lightDirection1, lightDirection2, lightDirection3, lightDirection4, lightDirection5, lightDirection6, lightDirection7, lightDirection8, lightDirection9, lightDirection10};
+	float3 lightDirections[10] = {lightDirection1, lightDirection2, lightDirection3, lightDirection4, lightDirection5, lightDirection6, lightDirection7, lightDirection8, lightDirection9, lightDirection10};
 	float3 lightPositions[10] = {lightPosition1, lightPosition2, lightPosition3, lightPosition4, lightPosition5, lightPosition6, lightPosition7, lightPosition8, lightPosition9, lightPosition10};
 
 	float4 textureColor = shaderTexture.Sample(SampleType, input.tex);
@@ -96,9 +98,9 @@ float4 PhongPixelShader(PixelInputType input) : SV_TARGET
 	for (int i = 0; i < lightCount; i++)
 	{
 		float3 L = normalize(lightPositions[i] - in_pos);
-		float3 multiplicator = k_d * max(0.0, dot(L, input.normal)) + k_s * pow(max(0.0, dot(R, L)), n);
+		float3 multiplicator = k_d * max(0.0f, dot(L, input.normal)) + k_s * pow(max(0.0f, dot(R, L)), n);
 		float divisor = saturate(dot((in_pos - lightPositions[i]), (in_pos - lightPositions[i])));
-		outputColor.rgb += (multiplicator * (lightColors[i].rgb / divisor), 1.0);
+		outputColor.rgb += (multiplicator * (lightColors[i].rgb / divisor), 1.0f);
 	}
 	if (lightCount > 0) 
 	{
@@ -108,4 +110,9 @@ float4 PhongPixelShader(PixelInputType input) : SV_TARGET
 	}
 
 	return saturate(outputColor);
+		
+
+	//TEST
+	//float4 textureColor = shaderTexture.Sample(SampleType, input.tex);
+	//return textureColor;
 }

@@ -220,7 +220,7 @@ bool PhongShadering::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* vs
 	lightBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	lightBufferDesc.MiscFlags = 0;
 	//lightBufferDesc.StructureByteStride = 0;
-	lightBufferDesc.StructureByteStride = sizeof(LightBuffer);
+	lightBufferDesc.StructureByteStride = 0;
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
 	result = device->CreateBuffer(&lightBufferDesc, NULL, &m_lightBuffer);
 	if (FAILED(result))
@@ -433,6 +433,9 @@ bool PhongShadering::SetShaderParameters(RenderData* renderData)
 
 	// Get a pointer to the data in the constant buffer.
 	lightDataPtr = (LightBuffer*) mappedResource.pData;
+
+	lightDataPtr->lightCount = light_count;
+	lightDataPtr->padding = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// Copy the lighting variables into the constant buffer.
 	int i = 0;

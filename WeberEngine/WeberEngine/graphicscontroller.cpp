@@ -40,11 +40,11 @@ bool GraphicsController::Initialize(int screenWidth, int screenHeight, HWND hwnd
 	}
 
 	//create Camera
-	m_camera = new Camera(D3DXVECTOR3(0.0f, 0.0f, -10.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f));
+	m_camera = new Camera(D3DXVECTOR3(0.0f, 0.0f, -3.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f));
 
 	//create light-vector
 	m_lights = new std::vector<Light>();
-	addLight(D3DXVECTOR3(0.0, 2.0, -1.0), D3DXVECTOR3(0.0, 1.0, 0.0), D3DXVECTOR4(1.0, 1.0, 1.0, 0.5));
+	addLight(D3DXVECTOR3(0.0, 3.0, -4.0), D3DXVECTOR3(0.0, 0.0, 1.0), D3DXVECTOR4(1.0, 1.0, 1.0, 0.5));
 
 	//Create models
 	models = new std::vector<StandardModel*>();
@@ -130,6 +130,16 @@ void GraphicsController::buildFrame()
 	renderData.lightColors = lightColors;
 	renderData.lightDirections = lightDirections;
 	renderData.lightPositions = lightPositions;
+
+	// Clear the buffers to begin the scene.
+	d3dClass->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
+
+	// Turn off alpha blending after rendering the text.
+	d3dClass->TurnOffAlphaBlending();
+	// Turn the Z buffer back on now that all 2D rendering has completed.
+	d3dClass->TurnZBufferOn();
+
+	bool renderSuccessful = false;
 	for (modelIndex = 0; modelIndex < models->size(); modelIndex++)
 	{
 		//first load model data to graphics card, then render it
@@ -138,8 +148,9 @@ void GraphicsController::buildFrame()
 		//load model-internal data to RenderData
 		renderData.indexCount = models->at(modelIndex)->GetIndexCount();
 		renderData.texture = models->at(modelIndex)->GetTexture();
-		phongShadering->Render(&renderData);
+		renderSuccessful = phongShadering->Render(&renderData);
 	}
+	d3dClass->EndScene();
 }
 
 void GraphicsController::addLight(D3DXVECTOR3 position, D3DXVECTOR3 direction, D3DXVECTOR4 color) {

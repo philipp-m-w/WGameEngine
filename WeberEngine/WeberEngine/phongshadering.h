@@ -58,6 +58,8 @@ private:
 		//specifies how many of the lights are really used
 		int lightCount;
 
+		D3DXVECTOR3 padding;
+
 		//TODO: Achtung Reihenfolge ist später für Grafikkarte exctrem wichtig!!
 		D3DXVECTOR4 lightColor1;
 		//Position und Richtung des Lichts für PhongShading
