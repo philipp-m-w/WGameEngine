@@ -100,7 +100,7 @@ float4 PhongPixelShader(PixelInputType input) : SV_TARGET
 		float3 L = normalize(lightPositions[i] - in_pos);
 		float3 multiplicator = k_d * max(0.0f, dot(L, input.normal)) + k_s * pow(max(0.0f, dot(R, L)), n);
 		float divisor = saturate(dot((in_pos - lightPositions[i]), (in_pos - lightPositions[i])));
-		outputColor.rgb += (multiplicator * (lightColors[i].rgb / divisor), 1.0f);
+		outputColor.rgb += (multiplicator * (lightColors[i].rgb / divisor));
 	}
 	if (lightCount > 0) 
 	{
@@ -109,7 +109,7 @@ float4 PhongPixelShader(PixelInputType input) : SV_TARGET
 		outputColor.rgb = k_d;
 	}
 
-	return saturate(outputColor);
+	return outputColor;
 		
 
 	//TEST
