@@ -26,5 +26,7 @@ public:
 	void ShutDown();
 	void addLight(D3DXVECTOR3 position, D3DXVECTOR3 direction, D3DXVECTOR4 color);
 
+	Camera* getCamera();
+
 	void buildFrame();
 };

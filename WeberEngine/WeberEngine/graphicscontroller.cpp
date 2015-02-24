@@ -157,3 +157,7 @@ void GraphicsController::addLight(D3DXVECTOR3 position, D3DXVECTOR3 direction, D
 	Light light = Light(position, direction, color);
 	m_lights->push_back(light);
 }
+
+Camera* GraphicsController::getCamera() {
+	return m_camera;
+}

@@ -27,13 +27,13 @@ void SystemController::checkDeviceInputs()
 void SystemController::processInputEvent(InputEvent event) {
 	switch (event)
 	{
-	case LEFT:
+	case LEFT: graphicsController->getCamera()->moveLeft();
 		break;
-	case RIGHT:
+	case RIGHT: graphicsController->getCamera()->moveRight();
 		break;
-	case UP:
+	case UP: graphicsController->getCamera()->moveForward();
 		break;
-	case DOWN:
+	case DOWN: graphicsController->getCamera()->moveBackward();
 		break;
 	case ESCAPE: display->closeFrame();
 		break;
@@ -41,9 +41,13 @@ void SystemController::processInputEvent(InputEvent event) {
 		break;
 	case SPACE:
 		break;
-	case MLEFTCLICK: display->closeFrame();
+	case MLEFTCLICK:
 		break;
-	case MRIGHTCLICK: display->closeFrame();
+	case MRIGHTCLICK:
+		break;
+	case KEY_Q: graphicsController->getCamera()->rotateRightAroundUp();
+		break;
+	case KEY_E: graphicsController->getCamera()->rotateLeftAroundUp();
 		break;
 	default:
 		break;
@@ -107,6 +111,7 @@ bool SystemController::Shutdown()
 
 void SystemController::buildFrame()
 {
+	graphicsController->getCamera()->updateCamera();
 	graphicsController->buildFrame();
 }
 
