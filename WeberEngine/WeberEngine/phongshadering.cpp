@@ -208,13 +208,19 @@ bool PhongShadering::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* vs
 
 	// Setup the description of the light dynamic constant buffer that is in the pixel shader.
 	// Note that ByteWidth always needs to be a multiple of 16 if using D3D11_BIND_CONSTANT_BUFFER or CreateBuffer will fail.
+	int byteWidth = sizeof(LightBuffer);
+	//make sure byteWidth is multiple of 16:
+	if ((byteWidth % 16) != 0) {
+		byteWidth = (byteWidth / 16 + 1) * 16;
+	}
+	
 	lightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	lightBufferDesc.ByteWidth = sizeof(LightBuffer);
+	lightBufferDesc.ByteWidth = byteWidth;
 	lightBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	lightBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	lightBufferDesc.MiscFlags = 0;
-	lightBufferDesc.StructureByteStride = 0;
-
+	//lightBufferDesc.StructureByteStride = 0;
+	lightBufferDesc.StructureByteStride = sizeof(LightBuffer);
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class.
 	result = device->CreateBuffer(&lightBufferDesc, NULL, &m_lightBuffer);
 	if (FAILED(result))
