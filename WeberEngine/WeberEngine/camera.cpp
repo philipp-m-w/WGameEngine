@@ -42,10 +42,10 @@ void Camera::setRotateUpSpeed(float speed){
 }
 
 void Camera::moveForward(){
-	m_position -= m_forwardSpeed * m_viewDirection;
+	m_position += m_forwardSpeed * m_viewDirection;
 }
 void Camera::moveBackward(){
-	m_position += m_forwardSpeed * m_viewDirection;
+	m_position -= m_forwardSpeed * m_viewDirection;
 }
 void Camera::moveUp(){
 	m_position += m_forwardSpeed * m_up;
@@ -80,18 +80,23 @@ D3DXMATRIX* Camera::GetViewMatrix(){
 
 void Camera::updateCamera(){
 
-	D3DXMATRIX rotationMatrix;
-	D3DXMatrixRotationYawPitchRoll(&rotationMatrix, m_yaw, m_pitch, m_roll);
-	
-	m_viewDirection = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
-	m_up = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+	D3DXVECTOR4 view;
+	D3DXMATRIX rotationMatrix3, rotationMatrix4;
+	D3DXMatrixRotationYawPitchRoll(&rotationMatrix3, m_yaw, m_pitch, m_roll);
+	rotationMatrix4 = D3DXMATRIX(rotationMatrix3._11, rotationMatrix3._12, rotationMatrix3._13, 0.0f, rotationMatrix3._21, rotationMatrix3._22, rotationMatrix3._23, 0.0f, rotationMatrix3._31, rotationMatrix3._32, rotationMatrix3._33, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+	view = D3DXVECTOR4(0.0f, 0.0f, 1.0f, 0.0f);
+	D3DXVec4Transform(&view, &view, &rotationMatrix4);
+	m_viewDirection.x = view.x;
+	m_viewDirection.y = view.y;
+	m_viewDirection.z = view.z;
 
-	D3DXVec3TransformCoord(&m_viewDirection, &m_viewDirection, &rotationMatrix);
-	D3DXVec3TransformCoord(&m_up, &m_up, &rotationMatrix);
+	D3DXVECTOR4 right = D3DXVECTOR4(1.0f, 0.0f, 0.0f, 0.0f);
+	D3DXVec4Transform(&right, &right, &rotationMatrix4);
+	m_right.x = right.x;
+	m_right.y = right.y;
+	m_right.z = right.z;
 
-	// Translate the rotated camera position to the location of the viewer.
-	m_viewDirection = m_position + m_viewDirection;
+	D3DXVECTOR3 posPlusDir = m_position + m_viewDirection;
 
-	// Finally create the view matrix from the three updated vectors.
-	D3DXMatrixLookAtLH(&m_viewMatrix, &m_position, &m_viewDirection, &m_up);
+	D3DXMatrixLookAtLH(&m_viewMatrix, &m_position, &posPlusDir, &m_up);
 }

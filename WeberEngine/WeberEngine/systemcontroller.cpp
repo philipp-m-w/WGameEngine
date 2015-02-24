@@ -39,7 +39,9 @@ void SystemController::processInputEvent(InputEvent event) {
 		break;
 	case ENTER:
 		break;
-	case SPACE:
+	case SPACE: graphicsController->getCamera()->moveUp();
+		break;
+	case CTRL: graphicsController->getCamera()->moveDown();
 		break;
 	case MLEFTCLICK:
 		break;

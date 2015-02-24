@@ -106,6 +106,13 @@ std::vector<InputEvent>* KeyboardInput::checkKeyboardInputs(){
 		//escape pressed
 		resultEvents->push_back(InputEvent::KEY_E);
 	}
+	if (m_keyboardState[DIK_LCONTROL] & 0x80)
+	{
+		//escape pressed
+		resultEvents->push_back(InputEvent::CTRL);
+	}
+
+	
 
 	return resultEvents;
 }
