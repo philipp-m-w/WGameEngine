@@ -63,7 +63,7 @@ cbuffer MaterialBuffer
 //////////////
 struct PixelInputType
 {
-	float3 cam_world_pos : TEXCOORD2;
+	float3 world_pos : TEXCOORD2;
 	//world position of the pixel
     float4 position : SV_POSITION;
     float2 tex : TEXCOORD0;
@@ -88,23 +88,25 @@ float4 PhongPixelShader(PixelInputType input) : SV_TARGET
 	float4 textureColor = shaderTexture.Sample(SampleType, input.tex);
 	float3 k_d = textureColor.xyz;
 
-	float3 V = normalize(input.cam_world_pos - input.position.xyz);
+	float3 V = normalize(input.viewDirection);
 	//TODO: reflect??
 	float3 R = normalize(reflect(V, input.normal));
 
-	float3 in_pos = input.position.xyz;
+	float3 in_pos = input.world_pos;
+	//float3 in_pos = input.position.xyz;
 
 	[loop]
 	for (int i = 0; i < lightCount; i++)
-	{
+	{		
 		float3 L = normalize(lightPositions[i] - in_pos);
 		float3 multiplicator = k_d * max(0.0f, dot(L, input.normal)) + k_s * pow(max(0.0f, dot(R, L)), n);
 		float divisor = saturate(dot((in_pos - lightPositions[i]), (in_pos - lightPositions[i])));
-		outputColor.rgb += (multiplicator * (lightColors[i].rgb / divisor));
+		//outputColor.rgb += (multiplicator * (lightColors[i].rgb / divisor));
+		outputColor.rgb += (multiplicator * (lightColors[i].rgb));
 	}
 	if (lightCount > 0) 
 	{
-		outputColor.rgb = (outputColor.rgb / lightCount);
+		outputColor.rgb = saturate(outputColor.rgb / lightCount);
 	} else {
 		outputColor.rgb = k_d;
 	}

@@ -26,7 +26,7 @@ struct VertexInputType
 
 struct PixelInputType
 {
-	float3 cam_world_pos : POSITION0;
+	float3 world_pos : POSITION0;
 	//world position of the pixel
     float4 position : SV_POSITION;
     float2 tex : TEXCOORD0;
@@ -56,7 +56,9 @@ PixelInputType PhongVertexShader(VertexInputType input)
     output.tex = input.tex;
 
 	// Calculate the normal vector against the world matrix only.
-    output.normal = mul(input.normal, (float3x3)worldMatrix);
+	float4 normal_ = float4(input.normal, 0.0f);
+	output.normal = (mul(input.normal, worldMatrix)).xyz;
+    //output.normal = mul(input.normal, (float3x3)worldMatrix);
 	
     // Normalize the normal vector.
     output.normal = normalize(output.normal);
@@ -70,7 +72,9 @@ PixelInputType PhongVertexShader(VertexInputType input)
     // Normalize the viewing direction vector.
     output.viewDirection = normalize(output.viewDirection);
 
-	output.cam_world_pos = cameraPosition.xyz;
+	//Position which is in the same space as light coordinates
+	output.world_pos = mul(input.position, worldMatrix);
+	//output.world_pos = mul(output.world_pos, viewMatrix);
 
     return output;
 }
