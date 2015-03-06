@@ -44,6 +44,7 @@ bool GraphicsController::Initialize(int screenWidth, int screenHeight, HWND hwnd
 
 	//create light-vector
 	m_lights = new std::vector<Light>();
+
 	addLight(D3DXVECTOR3(0.0, 0.5, -3.0), D3DXVECTOR3(0.0, 0.0, 1.0), D3DXVECTOR4(1.0, 1.0, 1.0, 0.9));
 	addLight(D3DXVECTOR3(-0.5, 1.0, -1.0), D3DXVECTOR3(0.0, 0.0, 1.0), D3DXVECTOR4(1.0, 1.0, 1.0, 0.9));
 	addLight(D3DXVECTOR3(0.5, 1.0, -1.0), D3DXVECTOR3(0.0, 0.0, 1.0), D3DXVECTOR4(1.0, 1.0, 1.0, 0.9));

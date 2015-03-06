@@ -1,11 +1,11 @@
 #include "light.h"
 
 
-Light::Light(D3DXVECTOR3 position, D3DXVECTOR3 direction, D3DXVECTOR4 color)
+Light::Light(D3DXVECTOR3 position, D3DXVECTOR3 direction, D3DXVECTOR4 color) :m_position(position), m_direction(direction), m_color(color)
 {
-	m_position = position;
-	m_direction = direction;
-	m_color = color;
+	//m_position = position;
+	//m_direction = direction;
+	//m_color = color;
 }
 
 Light::~Light()
