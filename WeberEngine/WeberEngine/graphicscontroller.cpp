@@ -44,7 +44,10 @@ bool GraphicsController::Initialize(int screenWidth, int screenHeight, HWND hwnd
 
 	//create light-vector
 	m_lights = new std::vector<Light>();
-	addLight(D3DXVECTOR3(0.0, 3.0, -4.0), D3DXVECTOR3(0.0, 0.0, 1.0), D3DXVECTOR4(1.0, 1.0, 1.0, 0.5));
+	addLight(D3DXVECTOR3(0.0, 0.5, -3.0), D3DXVECTOR3(0.0, 0.0, 1.0), D3DXVECTOR4(1.0, 1.0, 1.0, 0.9));
+	addLight(D3DXVECTOR3(-0.5, 1.0, -1.0), D3DXVECTOR3(0.0, 0.0, 1.0), D3DXVECTOR4(1.0, 1.0, 1.0, 0.9));
+	addLight(D3DXVECTOR3(0.5, 1.0, -1.0), D3DXVECTOR3(0.0, 0.0, 1.0), D3DXVECTOR4(1.0, 1.0, 1.0, 0.9));
+	addLight(D3DXVECTOR3(0.0, 1.0, -5.0), D3DXVECTOR3(0.0, 0.0, 1.0), D3DXVECTOR4(1.0, 1.0, 1.0, 0.9));
 
 	//Create models
 	models = new std::vector<StandardModel*>();
@@ -52,6 +55,18 @@ bool GraphicsController::Initialize(int screenWidth, int screenHeight, HWND hwnd
 	//Add the first model
 	StandardModel* catModel = new StandardModel("../WeberEngine/data/models/cat.txt", L"../WeberEngine/data/textures/cat.dds", d3dClass->GetDevice());
 	models->push_back(catModel);
+
+	//Add the second model
+	StandardModel* appleModel = new StandardModel("../WeberEngine/data/models/apple.txt", L"../WeberEngine/data/textures/apple.dds", d3dClass->GetDevice());
+	models->push_back(appleModel);
+
+	//Add the cube model
+	StandardModel* cubeModel = new StandardModel("../WeberEngine/data/models/cube.txt", L"../WeberEngine/data/textures/apple.dds", d3dClass->GetDevice());
+	models->push_back(cubeModel);
+
+	//Add the boden
+	StandardModel* bodenModel = new StandardModel("../WeberEngine/data/models/boden.txt", L"../WeberEngine/data/textures/boden.dds", d3dClass->GetDevice());
+	models->push_back(bodenModel);
 
 	//Initialize all models
 	for each (StandardModel* model in *models)
