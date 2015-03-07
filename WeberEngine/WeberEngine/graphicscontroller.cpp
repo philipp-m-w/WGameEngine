@@ -8,6 +8,7 @@ GraphicsController::GraphicsController()
 	m_lights = 0;
 	phongShadering = 0;
 	models = 0;
+	m_Frustum = 0;
 }
 
 GraphicsController::GraphicsController(const GraphicsController&)
@@ -41,6 +42,9 @@ bool GraphicsController::Initialize(int screenWidth, int screenHeight, HWND hwnd
 
 	//create Camera
 	m_camera = new Camera(D3DXVECTOR3(0.0f, 0.0f, -3.0f), D3DXVECTOR3(0.0f, 0.0f, 1.0f));
+	// Create the frustum object.
+	m_Frustum = new Frustum();
+
 
 	//create light-vector
 	m_lights = new std::vector<Light>();
@@ -88,6 +92,12 @@ bool GraphicsController::Initialize(int screenWidth, int screenHeight, HWND hwnd
 
 void GraphicsController::ShutDown()
 {
+	if (m_Frustum)
+	{
+		delete m_Frustum;
+		m_Frustum = 0;
+	}
+
 	if (d3dClass)
 	{
 		d3dClass->Shutdown();
@@ -121,6 +131,9 @@ void GraphicsController::buildFrame()
 	d3dClass->GetProjectionMatrix(projectionMatrix);
 	d3dClass->GetOrthoMatrix(orthoMatrix);
 
+	// Construct the frustum.
+	m_Frustum->ConstructFrustum(SCREEN_DEPTH, projectionMatrix, viewMatrix);
+
 	//D3DXVECTOR4 lightColors[light_count];
 	D3DXVECTOR4 lightColors[10];
 	D3DXVECTOR3 lightPositions[10];
@@ -139,7 +152,7 @@ void GraphicsController::buildFrame()
 	renderData.deviceContext = d3dClass->GetDeviceContext();	
 	renderData.k_s = D3DXVECTOR3(0.2, 0.2, 0.2);
 	renderData.light_count = m_lights->size();
-	renderData.n = 96.07f;
+	renderData.n = 80.0f;
 	renderData.projectionMatrix = projectionMatrix;
 	renderData.viewMatrix = viewMatrix;
 	renderData.worldMatrix = worldMatrix;
@@ -158,13 +171,20 @@ void GraphicsController::buildFrame()
 	bool renderSuccessful = false;
 	for (modelIndex = 0; modelIndex < models->size(); modelIndex++)
 	{
-		//first load model data to graphics card, then render it
-		models->at(modelIndex)->LoadModelDataToGraphicsCard(d3dClass->GetDeviceContext());
-		
-		//load model-internal data to RenderData
-		renderData.indexCount = models->at(modelIndex)->GetIndexCount();
-		renderData.texture = models->at(modelIndex)->GetTexture();
-		renderSuccessful = phongShadering->Render(&renderData);
+		//check if the model lies in the frustum
+		D3DXVECTOR3 minPoint = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		D3DXVECTOR3 maxPoint = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		models->at(modelIndex)->getBoundingBox(minPoint, maxPoint);
+		if (m_Frustum->CheckBB(minPoint, maxPoint))
+		{
+			//first load model data to graphics card, then render it
+			models->at(modelIndex)->LoadModelDataToGraphicsCard(d3dClass->GetDeviceContext());
+
+			//load model-internal data to RenderData
+			renderData.indexCount = models->at(modelIndex)->GetIndexCount();
+			renderData.texture = models->at(modelIndex)->GetTexture();
+			renderSuccessful = phongShadering->Render(&renderData);
+		}
 	}
 	d3dClass->EndScene();
 }

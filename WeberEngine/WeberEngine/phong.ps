@@ -78,7 +78,7 @@ struct PixelInputType
 float4 PhongPixelShader(PixelInputType input) : SV_TARGET
 {
 		
-	float4 outputColor = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	float4 outputColor = float4(0.1f, 0.1f, 0.1f, 1.0f);
 
 	//lege array fuer lichter an:
 	float4 lightColors[10] = {lightColor1, lightColor2, lightColor3, lightColor4, lightColor5, lightColor6, lightColor7, lightColor8, lightColor9, lightColor10};
@@ -90,7 +90,7 @@ float4 PhongPixelShader(PixelInputType input) : SV_TARGET
 
 	float3 V = normalize(input.viewDirection);
 	//TODO: reflect??
-	float3 R = normalize(reflect(V, input.normal));
+	
 
 	float3 in_pos = input.world_pos;
 	//float3 in_pos = input.position.xyz;
@@ -99,6 +99,7 @@ float4 PhongPixelShader(PixelInputType input) : SV_TARGET
 	for (int i = 0; i < lightCount; i++)
 	{		
 		float3 L = normalize(lightPositions[i] - in_pos);
+		float3 R = normalize(reflect(L, input.normal));
 		float3 multiplicator = k_d * max(0.0f, dot(L, input.normal)) + k_s * pow(max(0.0f, dot(R, L)), n);
 		float divisor = saturate(dot((in_pos - lightPositions[i]), (in_pos - lightPositions[i])));
 		//outputColor.rgb += (multiplicator * (lightColors[i].rgb / divisor));

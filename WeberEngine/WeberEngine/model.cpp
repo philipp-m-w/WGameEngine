@@ -10,6 +10,8 @@ StandardModel::StandardModel(char* modelFilePath, WCHAR* textureFilePath, ID3D11
 	vertexBuffer = 0;
 	indexBuffer = 0;	
 	modelData = 0;
+	m_minPoint = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_maxPoint = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 }
 
 StandardModel::StandardModel(const StandardModel&)
@@ -170,13 +172,35 @@ void StandardModel::LoadModel()
 	fin.get(input);
 	fin.get(input);
 
+	float minX = FLT_MAX;
+	float minY = FLT_MAX;
+	float minZ = FLT_MAX;
+	float maxX = FLT_MIN;
+	float maxY = FLT_MIN;
+	float maxZ = FLT_MIN;
+
 	// Read in the vertex data.
 	for (i = 0; i < vertexCount; i++)
 	{
 		fin >> modelData[i].px >> modelData[i].py >> modelData[i].pz;
 		fin >> modelData[i].tu >> modelData[i].tv;
 		fin >> modelData[i].nx >> modelData[i].ny >> modelData[i].nz;
+
+		//determine boundingBox
+		if (modelData[i].px > maxX) { maxX = modelData[i].px; }
+		if (modelData[i].py > maxY) { maxY = modelData[i].py; }
+		if (modelData[i].pz > maxZ) { maxZ = modelData[i].pz; }
+		if (modelData[i].px < minX) { minX = modelData[i].px; }
+		if (modelData[i].py < minY) { minY = modelData[i].py; }
+		if (modelData[i].pz < minZ) { minZ = modelData[i].pz; }
 	}
+
+	m_minPoint.x = minX;
+	m_minPoint.y = minY;
+	m_minPoint.z = minZ;
+	m_maxPoint.x = maxX;
+	m_maxPoint.y = maxY;
+	m_maxPoint.z = maxZ;
 
 	// Close the model file.
 	fin.close();
@@ -280,4 +304,10 @@ int StandardModel::GetVertexCount()
 ID3D11ShaderResourceView* StandardModel::GetTexture()
 {
 	return texture->GetTexture();
+}
+
+void StandardModel::getBoundingBox(D3DXVECTOR3& minPoint, D3DXVECTOR3& maxPoint) {
+	minPoint = m_minPoint;
+	maxPoint = m_maxPoint;
+	return;
 }

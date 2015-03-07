@@ -45,6 +45,10 @@ private:
 	//These are the model-buffers which will be loaded to graphics card
 	ID3D11Buffer *vertexBuffer, *indexBuffer;
 
+	//cube-BoundingBox
+	D3DXVECTOR3 m_minPoint;
+	D3DXVECTOR3 m_maxPoint;
+
 	void LoadTexture();
 	void ReleaseTexture();
 
@@ -62,7 +66,7 @@ public:
 	//Afterwards the Shader can be executed on the graphics card, so the model is drawn.
 	//!!Make sure this function is called before Shader-Rendering!!
 	void LoadModelDataToGraphicsCard(ID3D11DeviceContext* deviceContext);
-
+	void getBoundingBox(D3DXVECTOR3& minPoint, D3DXVECTOR3& maxPoint);
 	
 	bool Initialize();
 	void ShutDown();
