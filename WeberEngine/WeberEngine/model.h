@@ -30,8 +30,6 @@ private:
 		float nx, ny, nz;
 	};
 
-	bool scaling;
-	float scalingX, scalingY, scalingZ;
 
 	char* modelFilePath;
 	WCHAR* textureFilePath;
@@ -60,13 +58,9 @@ private:
 	void ShutdownBuffers();
 	bool InitializeBuffers();
 
-	/* Initializes the buffer, but scales the model in its size according to the scaling values */
-	bool InitializeBuffers(float scalingX, float scalingY, float scalingZ);
 	
 public:
 	StandardModel(char* modelFilePath, WCHAR* textureFilePath, ID3D11Device* device);
-	//Constructor for scaled models
-	StandardModel(char* modelFilePath, WCHAR* textureFilePath, ID3D11Device* device, float scalingX, float scalingY, float scalingZ);
 	StandardModel(const StandardModel&);
 	~StandardModel();
 
@@ -75,8 +69,6 @@ public:
 	//!!Make sure this function is called before Shader-Rendering!!
 	void LoadModelDataToGraphicsCard(ID3D11DeviceContext* deviceContext);
 	void getBoundingBox(D3DXVECTOR3& minPoint, D3DXVECTOR3& maxPoint);
-	
-	bool hasToBeScaled();
 
 	bool Initialize();
 	
@@ -89,6 +81,11 @@ public:
 	int GetIndexCount();
 	int GetVertexCount();
 	ID3D11ShaderResourceView* GetTexture();
+
+	//Transformationen
+	void scaleModelSize(float xScale, float yScale, float zScale);
+	void translateModel(float xDiff, float yDiff, float zDiff);
+	void scaleAndTranslateModel(float xScale, float yScale, float zScale, float xDiff, float yDiff, float zDiff);
 
 	//TODO: Model braucht getter für alle möglichen Zeichenoperationen?
 
