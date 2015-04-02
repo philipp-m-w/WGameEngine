@@ -35,8 +35,65 @@ struct PixelInputType
 ////////////////////////////////////////////////////////////////////////////////
 float4 PhongPixelShader(PixelInputType input) : SV_TARGET
 {
+	float3 reflection;
+    float4 specular;
+
+    input.normal = normalize(input.normal);
+	
+    float4 tex = shaderTexture.Sample(SampleType, input.tex);
+
+    float4 finalColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
+    specular = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	
+    //Create ambient
+    float4 finalAmbient = tex * float4(0.05f, 0.05f, 0.05f, 1.0f);
+	
+    //Create the vector between light position and pixels position
+    float3 lightToPixelVec = input.lightPos1 - input.world_pos;
 		
-	float4 outputColor = float4(0.0f, 0.0f, 0.0f, 0.0f);	
+    //Find the distance between the light pos and pixel pos
+    float distance = length(lightToPixelVec);
+	
+    //If pixel is too far, return
+    //if( distance > light.range )
+	if( distance > 50.0f )
+	return finalAmbient;
+		
+
+
+	//Turn lightToPixelVec into a unit length vector describing the pixels direction from the lights position
+	lightToPixelVec /= distance; 
+	
+	//Calculate how much light the pixel gets by the angle in which the light strikes the pixels surfaec
+	float howMuchLight = dot(input.normal, lightToPixelVec);
+	
+	
+	reflection = normalize(2 * input.normal + lightToPixelVec); 
+	specular.xyz = k_s * pow(saturate(dot(reflection, input.viewDirection)), n);
+	
+
+	//If light is striking the front side of the pixel
+	if( howMuchLight > 0.0f )
+	{	
+
+      	finalColor += howMuchLight * tex + specular;		
+
+        // falloff factor
+		//finalColor /= light.att[0] + (light.att[1] * distance) + (light.att[2] * (distance*distance));
+	
+	}	
+	    
+	finalColor = saturate(finalColor + finalAmbient);	
+	return finalColor;	
+	
+}
+
+
+// VON VORHER!!!!!!
+
+/*
+
+float4 outputColor = float4(0.0f, 0.0f, 0.0f, 0.0f);	
 	float4 diff_and_spec_color = float4(0.0f, 0.0f, 0.0f, 0.0f);	
 	float spec_normalization = (n + 2.0f) / (6.2831853f);
 
@@ -90,4 +147,5 @@ float4 PhongPixelShader(PixelInputType input) : SV_TARGET
 	//TEST
 	//float4 textureColor = shaderTexture.Sample(SampleType, input.tex);
 	//return textureColor;
-}
+
+*/

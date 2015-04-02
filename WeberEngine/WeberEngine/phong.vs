@@ -82,7 +82,7 @@ PixelInputType PhongVertexShader(VertexInputType input)
     worldPosition = mul(input.position, worldMatrix);
 
     // Determine the viewing direction based on the position of the camera and the position of the vertex in the world.
-    output.viewDirection = worldPosition.xyz - cameraPosition.xyz;
+    output.viewDirection = cameraPosition.xyz - worldPosition.xyz;
 	
     // Normalize the viewing direction vector.
     output.viewDirection = normalize(output.viewDirection);
@@ -92,10 +92,10 @@ PixelInputType PhongVertexShader(VertexInputType input)
 	//output.world_pos = mul(output.world_pos, viewMatrix);
 
 	//LightPositions
-	output.lightPosition1 = mul(lightPosition[0], worldMatrix).xyz; //lightPosition[0].xyz;
-	output.lightPosition2 = mul(lightPosition[1], worldMatrix).xyz;
-	output.lightPosition3 = mul(lightPosition[2], worldMatrix).xyz;
-	output.lightPosition4 = mul(lightPosition[3], worldMatrix).xyz;
+	output.lightPosition1 = lightPosition[0]; 
+	output.lightPosition2 = lightPosition[1];
+	output.lightPosition3 = lightPosition[2];
+	output.lightPosition4 = lightPosition[3];
 
 
     return output;

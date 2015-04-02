@@ -1,14 +1,36 @@
 #include "model.h"
 
 StandardModel::StandardModel(char* modelFilePath, WCHAR* textureFilePath, ID3D11Device* device) :
-						modelFilePath(modelFilePath),
-						textureFilePath(textureFilePath),
-						device(device),
-						vertexCount(0),
-						indexCount(0)
+			scaling(false),
+			modelFilePath(modelFilePath),
+			textureFilePath(textureFilePath),
+			device(device),
+			vertexCount(0),
+			indexCount(0),
+			scalingX(1.0f),
+			scalingY(1.0f),
+			scalingZ(1.0f)
 {
 	vertexBuffer = 0;
 	indexBuffer = 0;	
+	modelData = 0;
+	m_minPoint = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_maxPoint = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+}
+
+StandardModel::StandardModel(char* modelFilePath, WCHAR* textureFilePath, ID3D11Device* device, float scalingX, float scalingY, float scalingZ) :
+			scaling(true),
+			modelFilePath(modelFilePath),
+			textureFilePath(textureFilePath),
+			device(device),
+			vertexCount(0),
+			indexCount(0),
+			scalingX(scalingX),
+			scalingY(scalingY),
+			scalingZ(scalingZ)
+{
+	vertexBuffer = 0;
+	indexBuffer = 0;
 	modelData = 0;
 	m_minPoint = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_maxPoint = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -24,6 +46,11 @@ StandardModel::~StandardModel()
 
 }
 
+bool StandardModel::hasToBeScaled()
+{
+	return scaling;
+}
+
 bool StandardModel::Initialize()
 {
 	bool result;
@@ -31,14 +58,99 @@ bool StandardModel::Initialize()
 	LoadModel();
 
 	// Initialize the vertex and index buffer that hold the geometry for the triangle.
-	result = InitializeBuffers();
-	if (!result)
+	if (scaling) {
+		result = InitializeBuffers(scalingX, scalingY, scalingZ);
+		if (!result)
+		{
+			return false;
+		}
+	}
+	else {
+		result = InitializeBuffers();
+		if (!result)
+		{
+			return false;
+		}
+	}
+	
+
+	// Load the texture for this model.
+	LoadTexture();
+
+	return true;
+}
+
+bool StandardModel::InitializeBuffers(float scalingX, float scalingY, float scalingZ)
+{
+	//our vertex-data from the model files
+	Vertex* vertices;
+	//indices to vertices of model data
+	unsigned long* indices;
+	//descriptions for the buffer allocation on graphics card
+	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
+	D3D11_SUBRESOURCE_DATA vertexData, indexData;
+	HRESULT result;
+
+	vertices = new Vertex[vertexCount];
+	indices = new unsigned long[indexCount];
+
+	//Load vertex and index arrays with data from the loaded model
+	int i;
+	for (i = 0; i < vertexCount; i++)
+	{
+		vertices[i].position = D3DXVECTOR3(scalingX * modelData[i].px, scalingY * modelData[i].py, scalingZ * modelData[i].pz);
+		vertices[i].textureCoordinate = D3DXVECTOR2(modelData[i].tu, modelData[i].tv);
+		vertices[i].normal = D3DXVECTOR3(modelData[i].nx, modelData[i].ny, modelData[i].nz);
+
+		indices[i] = i;
+	}
+
+	// Set up the description of the static vertex buffer.
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.ByteWidth = sizeof(Vertex) * vertexCount;
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = 0;
+	vertexBufferDesc.MiscFlags = 0;
+	vertexBufferDesc.StructureByteStride = 0;
+
+	// Give the subresource structure a pointer to the vertex data.
+	vertexData.pSysMem = vertices;
+	vertexData.SysMemPitch = 0;
+	vertexData.SysMemSlicePitch = 0;
+
+	// Now create the vertex buffer.
+	result = device->CreateBuffer(&vertexBufferDesc, &vertexData, &vertexBuffer);
+	if (FAILED(result))
 	{
 		return false;
 	}
 
-	// Load the texture for this model.
-	LoadTexture();
+	// Set up the description of the static index buffer.
+	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	indexBufferDesc.ByteWidth = sizeof(unsigned long) * indexCount;
+	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indexBufferDesc.CPUAccessFlags = 0;
+	indexBufferDesc.MiscFlags = 0;
+	indexBufferDesc.StructureByteStride = 0;
+
+	// Give the subresource structure a pointer to the index data.
+	indexData.pSysMem = indices;
+	indexData.SysMemPitch = 0;
+	indexData.SysMemSlicePitch = 0;
+
+	// Create the index buffer.
+	result = device->CreateBuffer(&indexBufferDesc, &indexData, &indexBuffer);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	// Release the arrays now that the vertex and index buffers have been created and loaded.
+	delete[] vertices;
+	vertices = 0;
+
+	delete[] indices;
+	indices = 0;
 
 	return true;
 }
@@ -187,12 +299,22 @@ void StandardModel::LoadModel()
 		fin >> modelData[i].nx >> modelData[i].ny >> modelData[i].nz;
 
 		//determine boundingBox
-		if (modelData[i].px > maxX) { maxX = modelData[i].px; }
-		if (modelData[i].py > maxY) { maxY = modelData[i].py; }
-		if (modelData[i].pz > maxZ) { maxZ = modelData[i].pz; }
-		if (modelData[i].px < minX) { minX = modelData[i].px; }
-		if (modelData[i].py < minY) { minY = modelData[i].py; }
-		if (modelData[i].pz < minZ) { minZ = modelData[i].pz; }
+		if (scaling) {
+			if (scalingX * modelData[i].px > maxX) { maxX = scalingX * modelData[i].px; }
+			if (scalingY * modelData[i].py > maxY) { maxY = scalingY * modelData[i].py; }
+			if (scalingZ * modelData[i].pz > maxZ) { maxZ = scalingZ * modelData[i].pz; }
+			if (scalingX * modelData[i].px < minX) { minX = scalingX * modelData[i].px; }
+			if (scalingY * modelData[i].py < minY) { minY = scalingY * modelData[i].py; }
+			if (scalingZ * modelData[i].pz < minZ) { minZ = scalingZ * modelData[i].pz; }
+		}
+		else {
+			if (modelData[i].px > maxX) { maxX = modelData[i].px; }
+			if (modelData[i].py > maxY) { maxY = modelData[i].py; }
+			if (modelData[i].pz > maxZ) { maxZ = modelData[i].pz; }
+			if (modelData[i].px < minX) { minX = modelData[i].px; }
+			if (modelData[i].py < minY) { minY = modelData[i].py; }
+			if (modelData[i].pz < minZ) { minZ = modelData[i].pz; }
+		}		
 	}
 
 	m_minPoint.x = minX;

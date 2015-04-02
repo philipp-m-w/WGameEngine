@@ -30,6 +30,9 @@ private:
 		float nx, ny, nz;
 	};
 
+	bool scaling;
+	float scalingX, scalingY, scalingZ;
+
 	char* modelFilePath;
 	WCHAR* textureFilePath;
 	ID3D11Device* device;	
@@ -56,9 +59,14 @@ private:
 	void ReleaseModel();
 	void ShutdownBuffers();
 	bool InitializeBuffers();
+
+	/* Initializes the buffer, but scales the model in its size according to the scaling values */
+	bool InitializeBuffers(float scalingX, float scalingY, float scalingZ);
 	
 public:
 	StandardModel(char* modelFilePath, WCHAR* textureFilePath, ID3D11Device* device);
+	//Constructor for scaled models
+	StandardModel(char* modelFilePath, WCHAR* textureFilePath, ID3D11Device* device, float scalingX, float scalingY, float scalingZ);
 	StandardModel(const StandardModel&);
 	~StandardModel();
 
@@ -68,7 +76,12 @@ public:
 	void LoadModelDataToGraphicsCard(ID3D11DeviceContext* deviceContext);
 	void getBoundingBox(D3DXVECTOR3& minPoint, D3DXVECTOR3& maxPoint);
 	
+	bool hasToBeScaled();
+
 	bool Initialize();
+	
+	/* Initializes the model the same as Initialize(), but scales the model in its size according to the scaling values */
+	bool InitializeScaling(float scalingX, float scalingY, float scalingZ);
 	void ShutDown();
 	
 

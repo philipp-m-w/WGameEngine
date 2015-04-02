@@ -63,8 +63,8 @@ bool GraphicsController::Initialize(int screenWidth, int screenHeight, HWND hwnd
 	StandardModel* catModel = new StandardModel("../WeberEngine/data/models/cat.txt", L"../WeberEngine/data/textures/cat.dds", d3dClass->GetDevice());
 	models->push_back(catModel);
 
-	//Add the second model
-	StandardModel* appleModel = new StandardModel("../WeberEngine/data/models/apple.txt", L"../WeberEngine/data/textures/apple.dds", d3dClass->GetDevice());
+	//Add the second model !!THIS IS A SCALING MODEL -> it will be only 0.01 as big as specified in the modeldata
+	StandardModel* appleModel = new StandardModel("../WeberEngine/data/models/apple.txt", L"../WeberEngine/data/textures/apple.dds", d3dClass->GetDevice(), 0.01, 0.01, 0.01);
 	models->push_back(appleModel);
 
 	//Add the cube model
@@ -78,6 +78,7 @@ bool GraphicsController::Initialize(int screenWidth, int screenHeight, HWND hwnd
 	//Initialize all models
 	for each (StandardModel* model in *models)
 	{
+		//normal initialize
 		model->Initialize();
 	}
 
