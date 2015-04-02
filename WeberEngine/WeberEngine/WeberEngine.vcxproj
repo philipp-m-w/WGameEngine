@@ -81,10 +81,12 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="d3dclass.cpp" />
     <ClCompile Include="display.cpp" />
+    <ClCompile Include="frustum.cpp" />
     <ClCompile Include="graphicscontroller.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="keyboardinput.cpp" />
     <ClCompile Include="light.cpp" />
+    <ClCompile Include="lightshaderclass.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="mouseinput.cpp" />
@@ -96,11 +98,13 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="d3dclass.h" />
     <ClInclude Include="display.h" />
+    <ClInclude Include="frustum.h" />
     <ClInclude Include="graphicscontroller.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="inputsenum.h" />
     <ClInclude Include="keyboardinput.h" />
     <ClInclude Include="light.h" />
+    <ClInclude Include="lightshaderclass.h" />
     <ClInclude Include="model.h" />
     <ClInclude Include="mouseinput.h" />
     <ClInclude Include="options.h" />
@@ -109,6 +113,8 @@
     <ClInclude Include="texture.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="light.ps" />
+    <None Include="light.vs" />
     <None Include="phong.ps" />
     <None Include="phong.vs" />
   </ItemGroup>

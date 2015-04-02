@@ -78,6 +78,12 @@
     <ClCompile Include="light.cpp">
       <Filter>Quelldateien\Model</Filter>
     </ClCompile>
+    <ClCompile Include="frustum.cpp">
+      <Filter>Quelldateien\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="lightshaderclass.cpp">
+      <Filter>Quelldateien\Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="systemcontroller.h">
@@ -122,12 +128,24 @@
     <ClInclude Include="light.h">
       <Filter>Headerdateien\Model</Filter>
     </ClInclude>
+    <ClInclude Include="frustum.h">
+      <Filter>Headerdateien\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="lightshaderclass.h">
+      <Filter>Headerdateien\Model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="phong.vs">
       <Filter>shader</Filter>
     </None>
     <None Include="phong.ps">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="light.ps">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="light.vs">
       <Filter>shader</Filter>
     </None>
   </ItemGroup>

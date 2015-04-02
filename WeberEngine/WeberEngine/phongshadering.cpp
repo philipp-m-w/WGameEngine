@@ -208,14 +208,9 @@ bool PhongShadering::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* vs
 
 	// Setup the description of the light dynamic constant buffer that is in the pixel shader.
 	// Note that ByteWidth always needs to be a multiple of 16 if using D3D11_BIND_CONSTANT_BUFFER or CreateBuffer will fail.
-	int byteWidth = sizeof(LightBuffer);
-	//make sure byteWidth is multiple of 16:
-	if ((byteWidth % 16) != 0) {
-		byteWidth = (byteWidth / 16 + 1) * 16;
-	}
 	
 	lightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	lightBufferDesc.ByteWidth = byteWidth;
+	lightBufferDesc.ByteWidth = sizeof(LightPositionBuffer);
 	lightBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	lightBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	lightBufferDesc.MiscFlags = 0;
@@ -350,7 +345,7 @@ bool PhongShadering::SetShaderParameters(RenderData* renderData)
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	unsigned int bufferNumber;
 	MatrixBuffer* matrixDataPtr;
-	LightBuffer* lightDataPtr;
+	LightPositionBuffer* lightDataPtr;
 	CameraBuffer* cameraDataPtr;
 	MaterialBuffer* materialDataPtr;
 
@@ -360,10 +355,9 @@ bool PhongShadering::SetShaderParameters(RenderData* renderData)
 	D3DXMATRIX viewMatrix = renderData->viewMatrix;
 	D3DXMATRIX projectionMatrix = renderData->projectionMatrix;
 	ID3D11ShaderResourceView* texture = renderData->texture;
-	const int light_count = renderData->light_count;
-	//D3DXVECTOR3* lightDirections = renderData->lightDirections;
-	//D3DXVECTOR3* lightPositions = renderData->lightPositions;
-	//D3DXVECTOR4* lightColors = renderData->lightColors;
+
+	D3DXVECTOR4* lightPositions = renderData->lightPositions;
+
 	D3DXVECTOR3 cameraPosition = renderData->cameraPosition;
 	float n = renderData->n;
 	D3DXVECTOR3 k_s = renderData->k_s;
@@ -432,128 +426,20 @@ bool PhongShadering::SetShaderParameters(RenderData* renderData)
 	}
 
 	// Get a pointer to the data in the constant buffer.
-	lightDataPtr = (LightBuffer*) mappedResource.pData;
+	lightDataPtr = (LightPositionBuffer*) mappedResource.pData;
 
-	lightDataPtr->lightCount = light_count;
-	lightDataPtr->padding = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	lightDataPtr->lightPosition[0] = renderData->lightPositions[0];
+	lightDataPtr->lightPosition[1] = renderData->lightPositions[1];
+	lightDataPtr->lightPosition[2] = renderData->lightPositions[2];
+	lightDataPtr->lightPosition[3] = renderData->lightPositions[3];
 
-	// Copy the lighting variables into the constant buffer.
-	int i = 0;
-	if (i < light_count) {
-		lightDataPtr->lightColor1 = renderData->lightColors[i];
-		lightDataPtr->lightPosition1 = renderData->lightPositions[i];
-		lightDataPtr->lightDirection1 = renderData->lightDirections[i];
-	}
-	else {
-		lightDataPtr->lightColor1 = D3DXVECTOR4(0.0f, 0.0f, 0.0f, 0.0f);
-		lightDataPtr->lightPosition1 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		lightDataPtr->lightDirection1 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	}
-	i++;
-	if (i < light_count) {
-		lightDataPtr->lightColor2 = renderData->lightColors[i];
-		lightDataPtr->lightPosition2 = renderData->lightPositions[i];
-		lightDataPtr->lightDirection2 = renderData->lightDirections[i];
-	}
-	else {
-		lightDataPtr->lightColor2 = D3DXVECTOR4(0.0f, 0.0f, 0.0f, 0.0f);
-		lightDataPtr->lightPosition2 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		lightDataPtr->lightDirection2 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	}
-	i++;
-	if (i < light_count) {
-		lightDataPtr->lightColor3 = renderData->lightColors[i];
-		lightDataPtr->lightPosition3 = renderData->lightPositions[i];
-		lightDataPtr->lightDirection3 = renderData->lightDirections[i];
-	}
-	else {
-		lightDataPtr->lightColor3 = D3DXVECTOR4(0.0f, 0.0f, 0.0f, 0.0f);
-		lightDataPtr->lightPosition3 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		lightDataPtr->lightDirection3 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	}
-	i++;
-	if (i < light_count) {
-		lightDataPtr->lightColor4 = renderData->lightColors[i];
-		lightDataPtr->lightPosition4 = renderData->lightPositions[i];
-		lightDataPtr->lightDirection4 = renderData->lightDirections[i];
-	}
-	else {
-		lightDataPtr->lightColor4 = D3DXVECTOR4(0.0f, 0.0f, 0.0f, 0.0f);
-		lightDataPtr->lightPosition4 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		lightDataPtr->lightDirection4 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	}
-	i++;
-	if (i < light_count) {
-		lightDataPtr->lightColor5 = renderData->lightColors[i];
-		lightDataPtr->lightPosition5 = renderData->lightPositions[i];
-		lightDataPtr->lightDirection5 = renderData->lightDirections[i];
-	}
-	else {
-		lightDataPtr->lightColor5 = D3DXVECTOR4(0.0f, 0.0f, 0.0f, 0.0f);
-		lightDataPtr->lightPosition5 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		lightDataPtr->lightDirection5 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	}
-	i++;
-	if (i < light_count) {
-		lightDataPtr->lightColor6 = renderData->lightColors[i];
-		lightDataPtr->lightPosition6 = renderData->lightPositions[i];
-		lightDataPtr->lightDirection6 = renderData->lightDirections[i];
-	}
-	else {
-		lightDataPtr->lightColor6 = D3DXVECTOR4(0.0f, 0.0f, 0.0f, 0.0f);
-		lightDataPtr->lightPosition6 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		lightDataPtr->lightDirection6 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	}
-	i++;
-	if (i < light_count) {
-		lightDataPtr->lightColor7 = renderData->lightColors[i];
-		lightDataPtr->lightPosition7 = renderData->lightPositions[i];
-		lightDataPtr->lightDirection7 = renderData->lightDirections[i];
-	}
-	else {
-		lightDataPtr->lightColor7 = D3DXVECTOR4(0.0f, 0.0f, 0.0f, 0.0f);
-		lightDataPtr->lightPosition7 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		lightDataPtr->lightDirection7 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	}
-	i++;
-	if (i < light_count) {
-		lightDataPtr->lightColor8 = renderData->lightColors[i];
-		lightDataPtr->lightPosition8 = renderData->lightPositions[i];
-		lightDataPtr->lightDirection8 = renderData->lightDirections[i];
-	}
-	else {
-		lightDataPtr->lightColor8 = D3DXVECTOR4(0.0f, 0.0f, 0.0f, 0.0f);
-		lightDataPtr->lightPosition8 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		lightDataPtr->lightDirection8 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	}
-	i++;
-	if (i < light_count) {
-		lightDataPtr->lightColor9 = renderData->lightColors[i];
-		lightDataPtr->lightPosition9 = renderData->lightPositions[i];
-		lightDataPtr->lightDirection9 = renderData->lightDirections[i];
-	}
-	else {
-		lightDataPtr->lightColor9 = D3DXVECTOR4(0.0f, 0.0f, 0.0f, 0.0f);
-		lightDataPtr->lightPosition9 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		lightDataPtr->lightDirection9 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	}
-	i++;
-	if (i < light_count) {
-		lightDataPtr->lightColor10 = renderData->lightColors[i];
-		lightDataPtr->lightPosition10 = renderData->lightPositions[i];
-		lightDataPtr->lightDirection10 = renderData->lightDirections[i];
-	}
-	else {
-		lightDataPtr->lightColor10 = D3DXVECTOR4(0.0f, 0.0f, 0.0f, 0.0f);
-		lightDataPtr->lightPosition10 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		lightDataPtr->lightDirection10 = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	}
+	
 
 	// Unlock the constant buffer.
 	deviceContext->Unmap(m_lightBuffer, 0);
 
 	// Set the position of the light constant buffer in the pixel shader.
-	bufferNumber = 0;
+	bufferNumber = 2;
 
 	// Finally set the light constant buffer in the pixel shader with the updated values.
 	deviceContext->PSSetConstantBuffers(bufferNumber, 1, &m_lightBuffer);
@@ -577,7 +463,7 @@ bool PhongShadering::SetShaderParameters(RenderData* renderData)
 	deviceContext->Unmap(m_materialBuffer, 0);
 
 	// Set the position of the material constant buffer in the pixel shader.
-	bufferNumber = 1;
+	bufferNumber = 0;
 
 	// Finally set the light constant buffer in the pixel shader with the updated values.
 	deviceContext->PSSetConstantBuffers(bufferNumber, 1, &m_materialBuffer);

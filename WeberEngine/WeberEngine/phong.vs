@@ -1,4 +1,9 @@
 /////////////
+// DEFINES //
+/////////////
+#define NUM_LIGHTS 4
+
+/////////////
 // GLOBALS //
 /////////////
 cbuffer MatrixBuffer
@@ -12,6 +17,11 @@ cbuffer CameraBuffer
 {
     float3 cameraPosition;
     float padding;
+};
+
+cbuffer LightPositionBuffer
+{
+	float4 lightPosition[NUM_LIGHTS];
 };
 
 //////////////
@@ -31,7 +41,12 @@ struct PixelInputType
     float4 position : SV_POSITION;
     float2 tex : TEXCOORD0;
     float3 normal : NORMAL;
-    float3 viewDirection : TEXCOORD1;
+    float3 viewDirection : POSITION1;
+
+	float3 lightPosition1 : TEXCOORD1;
+	float3 lightPosition2 : TEXCOORD2;
+	float3 lightPosition3 : TEXCOORD3;
+	float3 lightPosition4 : TEXCOORD4;
 };
 
 
@@ -75,6 +90,13 @@ PixelInputType PhongVertexShader(VertexInputType input)
 	//Position which is in the same space as light coordinates
 	output.world_pos = mul(input.position, worldMatrix);
 	//output.world_pos = mul(output.world_pos, viewMatrix);
+
+	//LightPositions
+	output.lightPosition1 = mul(lightPosition[0], worldMatrix).xyz; //lightPosition[0].xyz;
+	output.lightPosition2 = mul(lightPosition[1], worldMatrix).xyz;
+	output.lightPosition3 = mul(lightPosition[2], worldMatrix).xyz;
+	output.lightPosition4 = mul(lightPosition[3], worldMatrix).xyz;
+
 
     return output;
 }

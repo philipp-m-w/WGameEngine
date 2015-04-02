@@ -6,6 +6,11 @@
 #include <fstream>
 using namespace std;
 
+/////////////
+// GLOBALS //
+/////////////
+const int NUMBER_OF_LIGHTS = 4;
+
 //all the data necessary to render using the PhongShadering
 struct RenderData
 {
@@ -18,11 +23,7 @@ struct RenderData
 
 	ID3D11ShaderResourceView* texture;
 
-	//Lights !!MULTIPLE!!
-	int light_count;
-	D3DXVECTOR3* lightDirections;
-	D3DXVECTOR3* lightPositions;
-	D3DXVECTOR4* lightColors;
+	D3DXVECTOR4* lightPositions;
 
 	//material info
 	float n;
@@ -53,54 +54,9 @@ private:
 		D3DXVECTOR3 k_s;		
 	};
 
-	struct LightBuffer
+	struct LightPositionBuffer
 	{
-		//specifies how many of the lights are really used
-		int lightCount;
-
-		D3DXVECTOR3 padding;
-
-		//TODO: Achtung Reihenfolge ist später für Grafikkarte exctrem wichtig!!
-		D3DXVECTOR4 lightColor1;
-		//Position und Richtung des Lichts für PhongShading
-		D3DXVECTOR3 lightDirection1;
-		D3DXVECTOR3 lightPosition1;	
-
-		D3DXVECTOR4 lightColor2;
-		D3DXVECTOR3 lightDirection2;
-		D3DXVECTOR3 lightPosition2;
-
-		D3DXVECTOR4 lightColor3;
-		D3DXVECTOR3 lightDirection3;
-		D3DXVECTOR3 lightPosition3;
-
-		D3DXVECTOR4 lightColor4;
-		D3DXVECTOR3 lightDirection4;
-		D3DXVECTOR3 lightPosition4;
-
-		D3DXVECTOR4 lightColor5;
-		D3DXVECTOR3 lightDirection5;
-		D3DXVECTOR3 lightPosition5;
-
-		D3DXVECTOR4 lightColor6;
-		D3DXVECTOR3 lightDirection6;
-		D3DXVECTOR3 lightPosition6;
-
-		D3DXVECTOR4 lightColor7;
-		D3DXVECTOR3 lightDirection7;
-		D3DXVECTOR3 lightPosition7;
-
-		D3DXVECTOR4 lightColor8;
-		D3DXVECTOR3 lightDirection8;
-		D3DXVECTOR3 lightPosition8;
-
-		D3DXVECTOR4 lightColor9;
-		D3DXVECTOR3 lightDirection9;
-		D3DXVECTOR3 lightPosition9;
-
-		D3DXVECTOR4 lightColor10;
-		D3DXVECTOR3 lightDirection10;
-		D3DXVECTOR3 lightPosition10;
+		D3DXVECTOR4 lightPosition[NUMBER_OF_LIGHTS];
 	};
 
 	//////////////

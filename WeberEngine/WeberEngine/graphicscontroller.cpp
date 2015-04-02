@@ -1,5 +1,6 @@
 #include "graphicscontroller.h"
 #include "options.h"
+#include <random>
 
 GraphicsController::GraphicsController()
 {
@@ -7,6 +8,7 @@ GraphicsController::GraphicsController()
 	m_camera = 0;
 	m_lights = 0;
 	phongShadering = 0;
+	lightShader = 0;
 	models = 0;
 	m_Frustum = 0;
 }
@@ -49,10 +51,10 @@ bool GraphicsController::Initialize(int screenWidth, int screenHeight, HWND hwnd
 	//create light-vector
 	m_lights = new std::vector<Light>();
 
-	addLight(D3DXVECTOR3(0.0, 0.5, -3.0), D3DXVECTOR3(0.0, 0.0, 1.0), D3DXVECTOR4(1.0, 1.0, 1.0, 0.9));
-	addLight(D3DXVECTOR3(-0.5, 1.0, -1.0), D3DXVECTOR3(0.0, 0.0, 1.0), D3DXVECTOR4(1.0, 1.0, 1.0, 0.9));
-	addLight(D3DXVECTOR3(0.5, 1.0, -1.0), D3DXVECTOR3(0.0, 0.0, 1.0), D3DXVECTOR4(1.0, 1.0, 1.0, 0.9));
-	addLight(D3DXVECTOR3(0.0, 1.0, -5.0), D3DXVECTOR3(0.0, 0.0, 1.0), D3DXVECTOR4(1.0, 1.0, 1.0, 0.9));
+	addLight(D3DXVECTOR3(-10.0f, 1.0f, -10.0), D3DXVECTOR3(0.0, 0.0, 1.0), D3DXVECTOR4(1.0, 1.0, 1.0, 0.9));
+	addLight(D3DXVECTOR3(10.0f, 10.0f, -10.0), D3DXVECTOR3(0.0, 0.0, 1.0), D3DXVECTOR4(1.0, 1.0, 1.0, 0.9));
+	addLight(D3DXVECTOR3(10.0f, 10.0f, 10.0), D3DXVECTOR3(0.0, 0.0, 1.0), D3DXVECTOR4(1.0, 1.0, 1.0, 0.9));
+	addLight(D3DXVECTOR3(-10.0f, 1.0f, 10.0), D3DXVECTOR3(0.0, 0.0, 1.0), D3DXVECTOR4(1.0, 1.0, 1.0, 0.9));
 
 	//Create models
 	models = new std::vector<StandardModel*>();
@@ -66,8 +68,8 @@ bool GraphicsController::Initialize(int screenWidth, int screenHeight, HWND hwnd
 	models->push_back(appleModel);
 
 	//Add the cube model
-	StandardModel* cubeModel = new StandardModel("../WeberEngine/data/models/cube.txt", L"../WeberEngine/data/textures/apple.dds", d3dClass->GetDevice());
-	models->push_back(cubeModel);
+	//StandardModel* cubeModel = new StandardModel("../WeberEngine/data/models/cube.txt", L"../WeberEngine/data/textures/apple.dds", d3dClass->GetDevice());
+	//models->push_back(cubeModel);
 
 	//Add the boden
 	StandardModel* bodenModel = new StandardModel("../WeberEngine/data/models/boden.txt", L"../WeberEngine/data/textures/boden.dds", d3dClass->GetDevice());
@@ -77,6 +79,14 @@ bool GraphicsController::Initialize(int screenWidth, int screenHeight, HWND hwnd
 	for each (StandardModel* model in *models)
 	{
 		model->Initialize();
+	}
+
+	lightShader = new LightShaderClass();
+	result = lightShader->Initialize(d3dClass->GetDevice(), hwnd);
+	if (!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the light shader object.", L"Error", MB_OK);
+		return false;
 	}
 
 	//Initialize Phong Shader
@@ -115,8 +125,23 @@ void GraphicsController::ShutDown()
 		model->ShutDown();
 	}
 	delete(models);
+
+	if (phongShadering)
+	{
+		phongShadering->Shutdown();
+	}
+
+	if (lightShader)
+	{
+		lightShader->Shutdown();
+	};
 }
 
+
+float RandomNumber(float Min, float Max)
+{
+	return ((float(rand()) / float(RAND_MAX)) * (Max - Min)) + Min;
+}
 
 /**
 * This Method is executed in every cycle of the Display Run-Method. It produces one Frame 
@@ -134,30 +159,33 @@ void GraphicsController::buildFrame()
 	// Construct the frustum.
 	m_Frustum->ConstructFrustum(SCREEN_DEPTH, projectionMatrix, viewMatrix);
 
-	//D3DXVECTOR4 lightColors[light_count];
-	D3DXVECTOR4 lightColors[10];
-	D3DXVECTOR3 lightPositions[10];
-	D3DXVECTOR3 lightDirections[10];
-	for (size_t i = 0; i < m_lights->size(); i++)
+
+	D3DXVECTOR4 lightPositions[4];
+	lightPositions[0] = D3DXVECTOR4(*m_camera->GetPosition(), 1.0f);
+	//lightPositions[0] = D3DXVECTOR4(m_lights->at(0).getPosition(), 1.0f);
+	for (size_t i = 1; i < 4; i++)
 	{
-		lightColors[i] = m_lights->at(i).getColor();
-		lightPositions[i] = m_lights->at(i).getPosition();
-		lightDirections[i] = m_lights->at(i).getDirection();
+		lightPositions[i] = D3DXVECTOR4(m_lights->at(i).getPosition(), 1.0f);
 	}
+	//TEST
+	//lightPositions[3] = D3DXVECTOR4(RandomNumber(-10.0f, 10.0f), RandomNumber(-5.0f, 20.0f), RandomNumber(0.0f, 10.0f), 1.0f);
+
+	D3DXVECTOR4 lightColors[4];
+	lightColors[0] = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f);
+	lightColors[1] = D3DXVECTOR4(1.0f, 0.0f, 0.0f, 1.0f);
+	lightColors[2] = D3DXVECTOR4(0.0f, 1.0f, 0.0f, 1.0f);
+	lightColors[3] = D3DXVECTOR4(0.0f, 0.0f, 1.0f, 1.0f);
 
 	int modelIndex;
 
 	RenderData renderData;
 	renderData.cameraPosition = *m_camera->GetPosition();
 	renderData.deviceContext = d3dClass->GetDeviceContext();	
-	renderData.k_s = D3DXVECTOR3(0.2, 0.2, 0.2);
-	renderData.light_count = m_lights->size();
+	renderData.k_s = D3DXVECTOR3(0.4, 0.4, 0.4);
 	renderData.n = 80.0f;
 	renderData.projectionMatrix = projectionMatrix;
 	renderData.viewMatrix = viewMatrix;
 	renderData.worldMatrix = worldMatrix;
-	renderData.lightColors = lightColors;
-	renderData.lightDirections = lightDirections;
 	renderData.lightPositions = lightPositions;
 
 	// Clear the buffers to begin the scene.
@@ -181,9 +209,17 @@ void GraphicsController::buildFrame()
 			models->at(modelIndex)->LoadModelDataToGraphicsCard(d3dClass->GetDeviceContext());
 
 			//load model-internal data to RenderData
-			renderData.indexCount = models->at(modelIndex)->GetIndexCount();
-			renderData.texture = models->at(modelIndex)->GetTexture();
-			renderSuccessful = phongShadering->Render(&renderData);
+			int indexCount = models->at(modelIndex)->GetIndexCount();
+			ID3D11ShaderResourceView* texture = models->at(modelIndex)->GetTexture();
+			//renderData.indexCount = indexCount;
+			//renderData.texture = texture;
+			//PhongShader Auffuf
+			//renderSuccessful = phongShadering->Render(&renderData);
+
+			//LightShader-Aufruf
+			lightShader->Render(d3dClass->GetDeviceContext(), indexCount, worldMatrix, viewMatrix,
+				projectionMatrix, texture, lightColors, lightPositions);
+
 		}
 	}
 	d3dClass->EndScene();

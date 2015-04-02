@@ -6,6 +6,7 @@
 #include "phongshadering.h"
 #include "model.h"
 #include "frustum.h"
+#include "lightshaderclass.h"
 #include <vector>
 
 
@@ -16,6 +17,7 @@ private:
 	Camera* m_camera;
 	Frustum* m_Frustum;
 	PhongShadering* phongShadering;
+	LightShaderClass* lightShader;
 	std::vector<Light>* m_lights;
 	std::vector<StandardModel*>* models;
 
