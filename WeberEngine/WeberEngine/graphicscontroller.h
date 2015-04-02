@@ -3,10 +3,9 @@
 #include "d3dclass.h"
 #include "camera.h"
 #include "light.h"
-#include "phongshadering.h"
 #include "model.h"
 #include "frustum.h"
-#include "lightshaderclass.h"
+#include "shadermanager.h"
 #include <vector>
 
 
@@ -16,10 +15,9 @@ private:
 	D3DClass* d3dClass;
 	Camera* m_camera;
 	Frustum* m_Frustum;
-	PhongShadering* phongShadering;
-	LightShaderClass* lightShader;
 	std::vector<Light>* m_lights;
 	std::vector<StandardModel*>* models;
+	ShaderManager* shaderManager;
 
 public:
 	GraphicsController();

@@ -91,6 +91,7 @@
     <ClCompile Include="model.cpp" />
     <ClCompile Include="mouseinput.cpp" />
     <ClCompile Include="phongshadering.cpp" />
+    <ClCompile Include="shadermanager.cpp" />
     <ClCompile Include="systemcontroller.cpp" />
     <ClCompile Include="texture.cpp" />
   </ItemGroup>
@@ -109,6 +110,7 @@
     <ClInclude Include="mouseinput.h" />
     <ClInclude Include="options.h" />
     <ClInclude Include="phongshadering.h" />
+    <ClInclude Include="shadermanager.h" />
     <ClInclude Include="systemcontroller.h" />
     <ClInclude Include="texture.h" />
   </ItemGroup>

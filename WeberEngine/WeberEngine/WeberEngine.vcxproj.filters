@@ -84,6 +84,9 @@
     <ClCompile Include="lightshaderclass.cpp">
       <Filter>Quelldateien\Model</Filter>
     </ClCompile>
+    <ClCompile Include="shadermanager.cpp">
+      <Filter>Quelldateien\Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="systemcontroller.h">
@@ -132,6 +135,9 @@
       <Filter>Headerdateien\Model</Filter>
     </ClInclude>
     <ClInclude Include="lightshaderclass.h">
+      <Filter>Headerdateien\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="shadermanager.h">
       <Filter>Headerdateien\Model</Filter>
     </ClInclude>
   </ItemGroup>

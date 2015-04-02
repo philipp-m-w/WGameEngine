@@ -7,8 +7,7 @@ GraphicsController::GraphicsController()
 	d3dClass = 0;
 	m_camera = 0;
 	m_lights = 0;
-	phongShadering = 0;
-	lightShader = 0;
+	shaderManager = 0;
 	models = 0;
 	m_Frustum = 0;
 }
@@ -82,22 +81,17 @@ bool GraphicsController::Initialize(int screenWidth, int screenHeight, HWND hwnd
 		model->Initialize();
 	}
 
-	lightShader = new LightShaderClass();
-	result = lightShader->Initialize(d3dClass->GetDevice(), hwnd);
-	if (!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the light shader object.", L"Error", MB_OK);
+	shaderManager = new ShaderManager();
+	if (!shaderManager) {
+		MessageBox(hwnd, L"Could not create the shaderManager.", L"Error", MB_OK);
 		return false;
 	}
-
-	//Initialize Phong Shader
-	phongShadering = new PhongShadering();
-	result = phongShadering->Initialize(d3dClass->GetDevice(), hwnd);
+	result = shaderManager->InitializeAll(d3dClass->GetDevice(), hwnd);
 	if (!result)
 	{
-		MessageBox(hwnd, L"Could not initialize the phong shader object.", L"Error", MB_OK);
+		MessageBox(hwnd, L"Could not initialize the shader-objects.", L"Error", MB_OK);
 		return false;
-	}
+	}	
 
 }
 
@@ -127,15 +121,11 @@ void GraphicsController::ShutDown()
 	}
 	delete(models);
 
-	if (phongShadering)
+	if (shaderManager)
 	{
-		phongShadering->Shutdown();
+		shaderManager->ShutDownAll();
 	}
 
-	if (lightShader)
-	{
-		lightShader->Shutdown();
-	};
 }
 
 
@@ -218,7 +208,7 @@ void GraphicsController::buildFrame()
 			//renderSuccessful = phongShadering->Render(&renderData);
 
 			//LightShader-Aufruf
-			lightShader->Render(d3dClass->GetDeviceContext(), indexCount, worldMatrix, viewMatrix,
+			shaderManager->RenderLightShader(d3dClass->GetDeviceContext(), indexCount, worldMatrix, viewMatrix,
 				projectionMatrix, texture, lightColors, lightPositions);
 
 		}
